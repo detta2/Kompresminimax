@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Hardening Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <title>Hubungi Kami - KompresMiniMax</title>
+    <meta name="description" content="Punya saran, masukan, pertanyaan, atau mau sapa tim KompresMiniMax? Kami senang sekali mendengar ceritamu!">
+    <link rel="canonical" href="https://kompresminimax.app/contact.html">
+    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="brand" title="KompresMiniMax - Kompresi Berkas Super Cepat">
+                <span class="brand-logo-wrap">
+                    <img src="logo.svg" alt="KompresMiniMax Dino Logo" width="36" height="36" class="brand-dino-img">
+                </span>
+                <span class="brand-text">Kompres<span class="brand-highlight">MiniMax</span></span>
+            </a>
+            <div class="nav-tools">
+                <a href="index.html" class="btn-sm btn-del">⬅️ Balik ke Beranda</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-container" style="max-width: 860px; margin-top: 2rem;">
+        <div class="main-card" style="line-height: 1.8;">
+            <h1 style="font-size: 1.8rem; color: var(--dark); margin-bottom: 0.5rem;">Ada yang Bisa Kami Bantu?</h1>
+            <p style="color: var(--gray-500); font-size: 0.85rem; margin-bottom: 1.5rem;">Punya saran fitur baru, nemu kendala teknis, atau sekadar mau ngobrol? Yuk kontak kami!</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+                <div style="padding: 1.25rem; background: var(--gray-100); border-radius: 12px; border: 1px solid var(--gray-200);">
+                    <h3 style="font-size: 1.05rem; color: var(--dark); margin-bottom: 0.3rem;">💌 Kirim Email</h3>
+                    <p style="color: var(--gray-700); font-size: 0.9rem;">Ngobrol langsung via email resmi:</p>
+                    <p style="font-weight: 700; color: var(--primary); margin-top: 0.4rem;">halo@kompresminimax.app</p>
+                </div>
+                <div style="padding: 1.25rem; background: var(--gray-100); border-radius: 12px; border: 1px solid var(--gray-200);">
+                    <h3 style="font-size: 1.05rem; color: var(--dark); margin-bottom: 0.3rem;">⚡ Respon Cepat</h3>
+                    <p style="color: var(--gray-700); font-size: 0.9rem;">Tim kami biasanya membalas dalam kurun waktu 1x24 jam kerja.</p>
+                </div>
+            </div>
+
+            <h2 style="font-size: 1.2rem; color: var(--dark); margin-bottom: 1rem;">Kirim Pesan Cepat</h2>
+            <form onsubmit="event.preventDefault(); alert('Terima kasih banyak atas pesan dan sarannya! Kami akan segera merespons.');" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark); margin-bottom: 0.3rem;">Nama Kamu</label>
+                    <input type="text" required placeholder="Tulis nama panggilanmu..." style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--gray-300); border-radius: 8px; font-family: inherit;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark); margin-bottom: 0.3rem;">Alamat Email</label>
+                    <input type="email" required placeholder="nama@emailkamu.com" style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--gray-300); border-radius: 8px; font-family: inherit;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--dark); margin-bottom: 0.3rem;">Pesan atau Saran</label>
+                    <textarea rows="4" required placeholder="Tuliskan apa yang ingin kamu tanyakan atau sampaikan di sini..." style="width: 100%; padding: 0.75rem; border: 1.5px solid var(--gray-300); border-radius: 8px; font-family: inherit;"></textarea>
+                </div>
+                <button type="submit" class="btn-primary-action" style="align-self: flex-start;">🚀 Kirim Pesan</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <strong>KompresMiniMax</strong>. Hak Cipta Dilindungi.</p>
+        <p style="margin-top: 6px;">
+            <a href="privacy.html" style="color:var(--gray-500); margin:0 8px;">Kebijakan Privasi</a> |
+            <a href="terms.html" style="color:var(--gray-500); margin:0 8px;">Ketentuan Layanan</a> |
+            <a href="about.html" style="color:var(--gray-500); margin:0 8px;">Tentang Kami</a> |
+            <a href="contact.html" style="color:var(--gray-500); margin:0 8px;">Hubungi Kami</a>
+        </p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Security Hardening Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    
+    <!-- Primary Meta SEO Tags -->
+    <title>Kompres PDF & Gambar ke KB/MB, Resize Pas Foto 2x3, 3x4, 4x6 CPNS - KompresMiniMax</title>
+    <meta name="title" content="Kompres PDF & Gambar ke KB/MB, Resize Pas Foto 2x3, 3x4, 4x6 CPNS - KompresMiniMax">
+    <meta name="description" content="Aplikasi web kompres file PDF & gambar ke target ukuran spesifik (100KB, 200KB CPNS, 500KB), ubah ukuran pas foto 2x3, 3x4, 4x6, gabung, pisah, rotasi PDF dan scan dokumen kamera 100% aman tanpa upload server.">
+    <meta name="keywords" content="kompres pdf 200kb, kompres pdf cpns, edit size foto, resize foto 3x4, pas foto 4x6, compress gambar kb, perkecil ukuran pdf, gabung pdf, pisah pdf, scan pdf online">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="KompresMiniMax">
+    <link rel="canonical" href="https://kompresminimax.app/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kompresminimax.app/">
+    <meta property="og:title" content="Kompres PDF & Gambar ke KB/MB, Resize Pas Foto 2x3, 3x4, 4x6 CPNS">
+    <meta property="og:description" content="Toolkit cerdas kompresi PDF/Foto ke batas target KB resmi, crop pas foto standar, gabung dan scan dokumen tanpa server.">
+    <meta property="og:site_name" content="KompresMiniMax">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:locale:alternate" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://kompresminimax.app/">
+    <meta name="twitter:title" content="Kompres PDF & Gambar ke KB/MB, Resize Pas Foto 2x3, 3x4, 4x6 CPNS">
+    <meta name="twitter:description" content="Toolkit cerdas kompresi PDF/Foto ke batas target KB resmi, crop pas foto standar, gabung dan scan dokumen tanpa server.">
+
+    <!-- JSON-LD Structured Data for Google (WebApplication & FAQ) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "KompresMiniMax",
+      "url": "https://kompresminimax.app/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "description": "All-in-one local client-side tool to compress PDF and images to specific KB/MB limits, resize passport photos, merge, split and organize documents.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Bagaimana cara kompres PDF ke ukuran maksimal 200 KB untuk CPNS / BUMN?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pilih menu Kompres File, pilih Target Ukuran dan tentukan 200 KB atau klik tombol preset 200 KB (CPNS). Unggah dokumen PDF Anda dan klik Kompres Semua. Algoritma biner kami akan menyesuaikan dokumen secara lokal di perangkat Anda."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bagaimana cara mengubah foto menjadi ukuran pas foto 3x4 atau 4x6?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Buka tab Edit Size Foto, unggah foto Anda, lalu klik preset ukuran cepat 'Pas Foto 3x4 (CPNS)' atau 'Pas Foto 4x6'. Sistem akan secara otomatis mengatur proporsi 300 DPI dan memotong (crop) bagian foto secara seimbang."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Apakah dokumen dan pas foto saya aman?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sangat aman. Seluruh proses pengolahan berkas dilakukan 100% Client-Side di peramban (browser) gawai Anda tanpa pernah diunggah ke server mana pun."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Dependencies: PDF-Lib & JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="brand" title="KompresMiniMax - Kompresi Berkas Super Cepat">
+                <span class="brand-logo-wrap">
+                    <img src="logo.svg" alt="KompresMiniMax Dino Logo" width="36" height="36" class="brand-dino-img">
+                </span>
+                <span class="brand-text">Kompres<span class="brand-highlight">MiniMax</span></span>
+            </a>
+
+            <!-- Header Controls: Realtime Clock, Language Selector & Privacy Badge -->
+            <div class="nav-tools">
+                <!-- Live Clock -->
+                <div class="nav-clock-box">
+                    <span class="clock-live-dot"></span>
+                    <span id="headerClockDisplay">--:--:--</span>
+                </div>
+
+                <!-- 2 Language Options: ID / EN -->
+                <div class="lang-selector-group">
+                    <button class="lang-btn active" data-lang="id" onclick="setLanguage('id')">
+                        🇮🇩 ID
+                    </button>
+                    <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">
+                        🇬🇧 EN
+                    </button>
+                </div>
+
+                <div class="nav-badge-privacy" data-i18n="privacyBadge">
+                    🔒 Privasi Aman (Lokal di HP/PC)
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-pill" data-i18n="heroPill">✨ Bereskan Dokumen & Foto Tanpa Ribet</div>
+            <h1 id="heroTitle">Kompres File Pas Sesuai <span>Ukuran Impian (KB/MB)</span></h1>
+            <p id="heroSubTitle" data-i18n="heroSub">Semua file diproses langsung di browsermu tanpa dikirim ke server luar. Bebas pusing batas ukuran berkas CPNS/BUMN, bikin pas foto rapi, gabung, pisah, sampai scan dokumen—semuanya serba cepat & gratis!</p>
+        </section>
+
+        <section class="app-container">
+            <!-- Navigation Tabs -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="compress" data-i18n="tabCompress" onclick="switchToolTab('compress')">
+                    🗜️ Kompres File
+                </button>
+                <button class="tab-btn" data-tab="resize" data-i18n="tabResize" onclick="switchToolTab('resize')">
+                    📐 Ubah Ukuran Foto
+                </button>
+                <button class="tab-btn" data-tab="merge" data-i18n="tabMerge" onclick="switchToolTab('merge')">
+                    📑 Gabung PDF
+                </button>
+                <button class="tab-btn" data-tab="split" data-i18n="tabSplit" onclick="switchToolTab('split')">
+                    ✂️ Pisah PDF
+                </button>
+                <button class="tab-btn" data-tab="organize" data-i18n="tabOrganize" onclick="switchToolTab('organize')">
+                    🔄 Susun PDF
+                </button>
+                <button class="tab-btn" data-tab="scan" data-i18n="tabScan" onclick="switchToolTab('scan')">
+                    📷 Scan Dokumen
+                </button>
+                <button class="tab-btn" data-tab="pdfconvert" data-i18n="tabPdfConvert" onclick="switchToolTab('pdfconvert')">
+                    📑 Konversi PDF
+                </button>
+            </div>
+
+            <!-- TAB 1: COMPRESS -->
+            <div class="main-card tool-view" id="viewCompress">
+                <div class="dropzone" id="dropZoneCompress">
+                    <div class="drop-icon-wrapper">🗜️</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropCompressTitle">Tarik atau Pilih File yang Mau Dikompres</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropCompressSub">
+                        Bisa foto (PNG, JPG, WEBP) maupun dokumen PDF sekaligus
+                    </p>
+                    <input type="file" id="fileInputCompress" multiple accept="image/*,.pdf,application/pdf" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChooseFile" onclick="document.getElementById('fileInputCompress').click()">Pilih File Kamu</button>
+                </div>
+
+                <!-- Mode Selector -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; flex-wrap: wrap; gap: 10px;">
+                    <div class="control-mode-selector">
+                        <button class="mode-chip active" id="chipTargetSize" data-i18n="chipTarget" onclick="setCompressionMode('target')">🎯 Pas Ukuran Tertentu (KB/MB)</button>
+                        <button class="mode-chip" id="chipQuality" data-i18n="chipQuality" onclick="setCompressionMode('quality')">🎚️ Atur Kualitas (%)</button>
+                    </div>
+                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--gray-500);" data-i18n="noteGov">Paling pas buat syarat CPNS, BUMN, beasiswa, visa & email</span>
+                </div>
+
+                <!-- Custom Size Target -->
+                <div class="settings-bar" id="targetSizeSettings">
+                    <div class="setting-group" style="grid-column: span 2;">
+                        <label>
+                            <span data-i18n="labelTargetMax">🎯 Mau Dikecilin Sampai Berapa?</span>
+                            <span id="targetSizeDisplay" style="color: var(--primary); font-weight: 800;">Maks 200 KB</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="customTargetVal" value="200" min="5" max="100000" placeholder="Contoh: 200">
+                            <select id="customTargetUnit">
+                                <option value="KB" selected>KB</option>
+                                <option value="MB">MB</option>
+                            </select>
+                        </div>
+                        <div class="target-slider-wrap">
+                            <input type="range" id="customTargetSlider" min="20" max="2000" step="10" value="200">
+                            <span class="slider-quick-val" id="targetSliderVal">200 KB</span>
+                        </div>
+                        <div class="preset-buttons">
+                            <span style="font-size: 0.75rem; color: var(--gray-500); align-self: center;">Preset:</span>
+                            <button class="preset-btn" onclick="applyPreset(100, 'KB')">100 KB</button>
+                            <button class="preset-btn" onclick="applyPreset(200, 'KB')">200 KB (CPNS)</button>
+                            <button class="preset-btn" onclick="applyPreset(300, 'KB')">300 KB</button>
+                            <button class="preset-btn" onclick="applyPreset(500, 'KB')">500 KB</button>
+                            <button class="preset-btn" onclick="applyPreset(1, 'MB')">1 MB (Email)</button>
+                            <button class="preset-btn" onclick="applyPreset(2, 'MB')">2 MB</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label data-i18n="labelFormatOutput">Format Output Gambar</label>
+                        <select id="formatSelect">
+                            <option value="original" data-i18n="formatOriginal">Format Asli</option>
+                            <option value="image/jpeg" selected data-i18n="formatJpg">JPEG (Paling Fleksibel)</option>
+                            <option value="image/webp" data-i18n="formatWebp">WEBP (Rasio Terkecil)</option>
+                            <option value="image/png" data-i18n="formatPng">PNG</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quality Mode Settings -->
+                <div class="settings-bar hidden" id="qualitySettings">
+                    <div class="setting-group">
+                        <label>
+                            <span data-i18n="labelQuality">Tingkat Kualitas</span>
+                            <span id="qualityVal">75%</span>
+                        </label>
+                        <input type="range" id="qualityRange" min="10" max="95" value="75">
+                    </div>
+
+                    <div class="setting-group">
+                        <label data-i18n="labelMaxRes">Maksimal Resolusi (Lebar)</label>
+                        <select id="resizeSelect">
+                            <option value="0" data-i18n="optOriginalSize">Ukuran Asli</option>
+                            <option value="2560">Max 2560px (2K)</option>
+                            <option value="1920" selected>Max 1920px (Full HD)</option>
+                            <option value="1280">Max 1280px (HD)</option>
+                            <option value="800">Max 800px (Mobile)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Queue & Actions -->
+                <div class="queue-container" id="compressQueue"></div>
+
+                <div class="bulk-actions hidden" id="compressBulkBar">
+                    <div class="stats-summary" id="compressStats">Total: 0 file</div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn-sm btn-del" data-i18n="btnClean" onclick="clearCompressQueue()">Bersihkan</button>
+                        <button class="btn-primary-action" id="btnCompressAll" data-i18n="btnCompressAll" onclick="processAllCompress()">⚡ Mulai Kompres Semua</button>
+                        <button class="btn-primary-action hidden" id="btnCompressZip" style="background: #16a34a;" data-i18n="btnDownloadZip" onclick="downloadCompressZip()">📦 Unduh Semua Sekaligus (.ZIP)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: EDIT SIZE FOTO (RESIZER & PAS FOTO) -->
+            <div class="main-card tool-view hidden" id="viewResize">
+                <div class="dropzone" id="dropZoneResize">
+                    <div class="drop-icon-wrapper">📐</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropResizeTitle">Pilih Foto Kamu yang Mau Diatur Ukurannya</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropResizeSub">
+                        Bisa ubah pixel, potong pas foto 2x3, 3x4, 4x6 buat daftar CPNS/ijazah, atau sesuaikan ukuran medsos.
+                    </p>
+                    <input type="file" id="fileInputResize" accept="image/*" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChoosePhoto" onclick="document.getElementById('fileInputResize').click()">Pilih Foto Kamu</button>
+                </div>
+
+                <div id="resizeWorkspace" class="hidden" style="margin-top: 1.5rem;">
+                    <!-- Preset Selector -->
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--gray-700); margin-bottom: 6px; display: block;" data-i18n="labelQuickPresets">
+                            ⚡ Ukuran Siap Pakai:
+                        </label>
+                        <div class="preset-buttons">
+                            <button class="preset-btn" data-i18n="preset2x3" onclick="applyResizePreset('pas2x3')">👤 Pas Foto 2x3</button>
+                            <button class="preset-btn" data-i18n="preset3x4" onclick="applyResizePreset('pas3x4')">👤 Pas Foto 3x4 (CPNS)</button>
+                            <button class="preset-btn" data-i18n="preset4x6" onclick="applyResizePreset('pas4x6')">👤 Pas Foto 4x6</button>
+                            <button class="preset-btn" data-i18n="presetSquare" onclick="applyResizePreset('square')">⏹️ Persegi 1:1 (Instagram)</button>
+                            <button class="preset-btn" data-i18n="presetStory" onclick="applyResizePreset('story')">📱 Story 9:16 (Status)</button>
+                            <button class="preset-btn" data-i18n="presetReset" onclick="resetToOriginalResize()">🔄 Balik ke Ukuran Awal</button>
+                        </div>
+                    </div>
+
+                    <!-- Dimension Controls -->
+                    <div class="settings-bar">
+                        <div class="setting-group">
+                            <label data-i18n="labelWidth">Lebar (Width) [px]</label>
+                            <input type="number" id="resizeWidthInput" min="10" max="10000" oninput="onWidthChange()">
+                        </div>
+                        <div class="setting-group">
+                            <label data-i18n="labelHeight">Tinggi (Height) [px]</label>
+                            <input type="number" id="resizeHeightInput" min="10" max="10000" oninput="onHeightChange()">
+                        </div>
+                        <div class="setting-group">
+                            <label data-i18n="labelLockAspect">Kunci Perbandingan Ukuran</label>
+                            <select id="resizeLockAspect" onchange="onLockAspectChange()">
+                                <option value="lock" selected data-i18n="optLock">🔒 Kunci Proporsional (Anti Gepeng)</option>
+                                <option value="free" data-i18n="optFree">🔓 Bebas Atur Sesukamu</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label data-i18n="labelFitMode">Gaya Pas Foto / Tampilan</label>
+                            <select id="resizeFitMode" onchange="renderResizeCanvas()">
+                                <option value="fit" selected data-i18n="optFit">Fit (Tampilkan Utuh)</option>
+                                <option value="crop" data-i18n="optCrop">Crop / Fill (Isi Penuh Pas Foto Rapi)</option>
+                                <option value="stretch" data-i18n="optStretch">Stretch (Tarik Pas Frame)</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label data-i18n="labelFormatOutput">Format Output</label>
+                            <select id="resizeFormatSelect" onchange="renderResizeCanvas()">
+                                <option value="image/jpeg" selected>JPEG (.jpg)</option>
+                                <option value="image/png">PNG (.png)</option>
+                                <option value="image/webp">WEBP (.webp)</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label><span data-i18n="labelOutputQuality">Kualitas Output:</span> <span id="resizeQualityLabel" style="color:var(--primary); font-weight:800;">90%</span></label>
+                            <input type="range" id="resizeQualityRange" min="20" max="100" value="90" oninput="onResizeQualityChange(this.value)">
+                        </div>
+                    </div>
+
+                    <!-- Canvas Live Preview -->
+                    <div style="margin-top: 1.5rem; text-align: center; background: var(--gray-100); border-radius: var(--radius-md); padding: 1.5rem; border: 1px dashed var(--gray-300);">
+                        <p style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 0.8rem;">
+                            <span data-i18n="previewTitle">Intip Hasil Foto</span> (<span id="resizePreviewDims">0 x 0 px</span> | Est: <span id="resizePreviewEst">0 KB</span>)
+                        </p>
+                        <div style="display: flex; justify-content: center; align-items: center; max-height: 420px; overflow: hidden;">
+                            <canvas id="resizeCanvasPreview" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: var(--shadow-sm); background: #fff;"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Action Bar -->
+                    <div class="bulk-actions" style="margin-top: 1.5rem;">
+                        <div>
+                            <strong id="resizeOrigMeta">-</strong>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-sm btn-del" data-i18n="btnChangePhoto" onclick="cancelResize()">Ganti Foto Lain</button>
+                            <button class="btn-primary-action" data-i18n="btnSavePhoto" onclick="downloadResizedPhoto()">⬇️ Simpan & Unduh Foto</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: MERGE PDF -->
+            <div class="main-card tool-view hidden" id="viewMerge">
+                <div class="dropzone" id="dropZoneMerge">
+                    <div class="drop-icon-wrapper">📑</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropMergeTitle">Pilih File-File PDF yang Mau Disatukan</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropMergeSub">
+                        Pilih 2 file PDF atau lebih. Kamu bebas geser buat atur urutannya sebelum digabung.
+                    </p>
+                    <input type="file" id="fileInputMerge" multiple accept=".pdf,application/pdf" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChoosePdf" onclick="document.getElementById('fileInputMerge').click()">Pilih File Kamu PDF</button>
+                </div>
+
+                <div class="queue-container" id="mergeQueue"></div>
+
+                <div class="bulk-actions hidden" id="mergeBulkBar">
+                    <div class="stats-summary" id="mergeStats">0 PDF siap digabungkan</div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-sm btn-del" data-i18n="btnClean" onclick="clearMergeQueue()">Batal</button>
+                        <button class="btn-primary-action" id="btnExecuteMerge" data-i18n="btnMergeNow" onclick="executeMergePDF()">
+                            🔗 Satukan PDF Sekarang
+                        </button>
+                    </div>
+                </div>
+
+                <div id="mergeResultBox" class="settings-bar hidden" style="background: var(--success-bg); border-color: rgba(16, 185, 129, 0.3);">
+                    <div>
+                        <h4 style="color: #065f46; font-weight: 800;" data-i18n="mergeSuccessTitle">🎉 File PDF Berhasil Digabung!</h4>
+                        <p id="mergeResultDetails" style="font-size: 0.85rem; color: #047857;" data-i18n="mergeSuccessSub">Dokumen gabungan siap diunduh.</p>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; align-items:center;">
+                        <a id="mergeDownloadBtn" class="btn-primary-action" style="background: #059669; text-decoration:none;" download="gabungan_dokumen.pdf" data-i18n="btnDownloadMerged">⬇️ Unduh PDF Gabungan</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: SPLIT PDF -->
+            <div class="main-card tool-view hidden" id="viewSplit">
+                <div class="dropzone" id="dropZoneSplit">
+                    <div class="drop-icon-wrapper">✂️</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropSplitTitle">Pilih File PDF yang Mau Dipisah</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropSplitSub">
+                        Ambil lembar tertentu aja atau bagi per beberapa halaman (misal: 1-3, 5)
+                    </p>
+                    <input type="file" id="fileInputSplit" accept=".pdf,application/pdf" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChoosePdfSource" onclick="document.getElementById('fileInputSplit').click()">Pilih PDF Sumber</button>
+                </div>
+
+                <div id="splitFileMeta" class="settings-bar hidden">
+                    <div class="setting-group" style="grid-column: span 2;">
+                        <label>Dokumen: <strong id="splitDocName">-</strong> (<span id="splitDocPages">0</span> Halaman)</label>
+                        <div style="display: flex; gap: 10px; margin-top: 6px;">
+                            <input type="text" id="splitRangeInput" placeholder="Contoh rentang: 1-3 atau 2, 4-6" style="flex:1;">
+                            <button class="btn-primary-action" data-i18n="btnSplitNow" onclick="executeSplitPDF()">✂️ Pisahkan Halaman Sekarang</button>
+                        </div>
+                    </div>
+                    <div class="setting-group">
+                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                            <input type="checkbox" id="splitAllPagesCheckbox" onchange="toggleSplitAll(this)">
+                            <span data-i18n="checkSplitAll">Bagi Semua Halaman Jadi File Terpisah (ZIP)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="splitResultBox" class="settings-bar hidden" style="background: var(--success-bg); border-color: rgba(16, 185, 129, 0.3);">
+                    <div>
+                        <h4 style="color: #065f46; font-weight: 800;" data-i18n="splitSuccessTitle">🎉 Pemisahan Berhasil!</h4>
+                        <p id="splitResultDetails" style="font-size: 0.85rem; color: #047857;">Halaman terpilih berhasil diekstrak.</p>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; align-items:center;">
+                        <a id="splitDownloadBtn" class="btn-primary-action" style="background: #059669; text-decoration:none;" download data-i18n="btnDownloadSplit">⬇️ Unduh Hasil Pemisahan</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: ORGANIZE PDF -->
+            <div class="main-card tool-view hidden" id="viewOrganize">
+                <div class="dropzone" id="dropZoneOrganize">
+                    <div class="drop-icon-wrapper">🔄</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropOrganizeTitle">Bereskan Urutan, Putar & Hapus Lembar PDF</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropOrganizeSub">
+                        Putar halaman yang miring, hapus lembar yang gak perlu, atau geser urutan lembaran sesuka hati.
+                    </p>
+                    <input type="file" id="fileInputOrganize" accept=".pdf,application/pdf" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChoosePdfOrganize" onclick="document.getElementById('fileInputOrganize').click()">Pilih PDF yang Mau Dirapikan</button>
+                </div>
+
+                <div id="organizeWorkspace" class="hidden">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem; flex-wrap:wrap; gap:10px;">
+                        <div>
+                            <h4 id="organizeDocTitle" style="font-weight:700;">Dokumen: -</h4>
+                            <p style="font-size:0.8rem; color:var(--gray-500);">↺ / ↻ rotasi | ◀ / ▶ urutan | 🗑️ buang halaman</p>
+                        </div>
+                        <button class="btn-primary-action" data-i18n="btnSaveOrganize" onclick="saveOrganizedPDF()">
+                            💾 Simpan PDF yang Udah Rapi
+                        </button>
+                    </div>
+
+                    <div class="pages-grid" id="pagesGrid"></div>
+                </div>
+            </div>
+
+            <!-- TAB 6: SCAN TO PDF -->
+            <div class="main-card tool-view hidden" id="viewScan">
+                <div style="text-align: center;">
+                    <div class="drop-icon-wrapper">📷</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropScanTitle">Scan Dokumen Jadi PDF (Foto ke PDF)</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropScanSub">
+                        Bisa langsung jepret lewat kamera HP/laptop atau masukkan foto lembaran biar jadi satu file PDF resmi yang rapi.
+                    </p>
+                    
+                    <div style="display:flex; justify-content:center; gap:10px; margin-top:1.2rem; flex-wrap:wrap;">
+                        <button class="btn-upload" data-i18n="btnOpenCam" onclick="startCameraScanner()" id="btnStartCamera">📸 Buka Kamera Scanner</button>
+                        <button class="btn-upload" style="background:var(--gray-700);" data-i18n="btnUploadDocPhotos" onclick="document.getElementById('scanFileInput').click()">🖼️ Masukkan Foto Dokumen</button>
+                        <input type="file" id="scanFileInput" multiple accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="camera-container hidden" id="cameraBox">
+                    <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-primary-action" data-i18n="btnSnapPage" onclick="captureDocumentPhoto()">📸 Jepret Lembar Ini</button>
+                        <button class="btn-sm btn-del" style="color:#fff;" data-i18n="btnCloseCam" onclick="stopCameraScanner()">Tutup Kamera</button>
+                    </div>
+                </div>
+
+                <div id="scanPagesPreview" class="hidden" style="margin-top: 1.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h4 style="font-weight:700;">Halaman Terpindai (<span id="scanPageCount">0</span> Lembar)</h4>
+                        <button class="btn-primary-action" data-i18n="btnCreateOfficialPdf" onclick="generatePdfFromScan()">📑 Satukan Jadi File PDF</button>
+                    </div>
+                    <div class="scanned-pages-strip" id="scannedPagesStrip"></div>
+                </div>
+            </div>
+
+                        <!-- TAB 7: PDF TO ALL CONVERTER (WORD, PPTX, EXCEL, TEXT, IMAGES, HTML) -->
+            <div class="main-card tool-view hidden" id="viewPdfConvert">
+                <!-- Dropzone Saat Belum Ada File -->
+                <div class="dropzone" id="dropZonePdfConvert">
+                    <div class="drop-icon-wrapper">🔄</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropPdfConvertTitle">Pilih Dokumen PDF untuk Dikonversi</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropPdfConvertSub">
+                        Konversi PDF ke PowerPoint (.pptx), Word (.docx/.doc), Excel (.xlsx), Teks (.txt), Gambar (.zip), atau Web (.html) 100% lokal di browser tanpa upload ke server.
+                    </p>
+                    <input type="file" id="fileInputPdfConvert" accept=".pdf,application/pdf" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChoosePdfSource" onclick="document.getElementById('fileInputPdfConvert').click()">Pilih File PDF Kamu</button>
+                </div>
+
+                <!-- Bagian Kontrol & Menu Format (Tampil Saat File Terpilih Maupun Sebelum Terpilih) -->
+                <div id="pdfConvertWorkspace" class="hidden" style="margin-top: 1rem;">
+                    <!-- Info File PDF Terunggah -->
+                    <div class="convert-preview-card" id="pdfConvertInfoBox" style="margin-top: 0; margin-bottom: 1.5rem; background: #f8fafc; border: 1.5px solid #e2e8f0;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div style="width:44px; height:44px; border-radius:10px; background:#fee2e2; color:#ef4444; display:flex; align-items:center; justify-content:center; font-size:1.5rem; font-weight:bold;">
+                                    📑
+                                </div>
+                                <div>
+                                    <h4 id="convertDocTitle" style="font-weight:700; font-size:1.05rem; color:var(--dark); margin:0;">nama-file.pdf</h4>
+                                    <div style="display:flex; gap:10px; margin-top:4px; font-size:0.85rem; color:var(--gray-500);">
+                                        <span>Ukuran: <strong id="convertDocSize" style="color:var(--dark);">0 KB</strong></span>
+                                        <span>•</span>
+                                        <span>Total: <strong id="convertDocPages" style="color:var(--primary);">0</strong> Halaman</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <button class="btn-sm btn-del" onclick="document.getElementById('fileInputPdfConvert').click()">📂 Ganti File</button>
+                                <button class="btn-sm" style="background:#f1f5f9; color:var(--gray-700); border:1px solid #cbd5e1;" onclick="resetPdfConvert()">✕ Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pilihan Menu Format Hasil Konversi -->
+                    <div style="background:#ffffff; border:1.5px solid var(--gray-200); border-radius:14px; padding:18px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                            <label style="font-weight: 700; font-size: 1rem; color: var(--dark);" data-i18n="labelChooseFormat">
+                                🎯 Pilih Format Hasil Konversi:
+                            </label>
+                            <span style="font-size:0.8rem; color:var(--primary); font-weight:600;">Klik salah satu format di bawah ini</span>
+                        </div>
+
+                        <div class="convert-options-grid">
+                            <!-- Opsi PowerPoint (.pptx) -->
+                            <div class="format-card" data-format="powerpoint" onclick="selectConvertFormat('powerpoint')">
+                                <div class="format-icon">📽️</div>
+                                <div class="format-name">PowerPoint (PPTX)</div>
+                                <div class="format-desc">Format Slide Presentasi (.pptx)</div>
+                            </div>
+
+                            <!-- Opsi Word -->
+                            <div class="format-card selected" data-format="word" onclick="selectConvertFormat('word')">
+                                <div class="format-icon">📄</div>
+                                <div class="format-name">Microsoft Word</div>
+                                <div class="format-desc">Format .doc (Teks & Paragraf)</div>
+                            </div>
+
+                            <!-- Opsi Excel -->
+                            <div class="format-card" data-format="excel" onclick="selectConvertFormat('excel')">
+                                <div class="format-icon">📊</div>
+                                <div class="format-name">Microsoft Excel</div>
+                                <div class="format-desc">Format .xlsx (Tabel & Kolom)</div>
+                            </div>
+
+                            <!-- Opsi Plain Text -->
+                            <div class="format-card" data-format="text" onclick="selectConvertFormat('text')">
+                                <div class="format-icon">📝</div>
+                                <div class="format-name">Plain Text</div>
+                                <div class="format-desc">Format .txt (Semua Teks Bersih)</div>
+                            </div>
+
+                            <!-- Opsi Gambar ZIP -->
+                            <div class="format-card" data-format="images" onclick="selectConvertFormat('images')">
+                                <div class="format-icon">🖼️</div>
+                                <div class="format-name">Gambar Tiap Halaman</div>
+                                <div class="format-desc">Format .zip (Ekstrak Tiap Lembar)</div>
+                            </div>
+
+                            <!-- Opsi Web HTML -->
+                            <div class="format-card" data-format="html" onclick="selectConvertFormat('html')">
+                                <div class="format-icon">🌐</div>
+                                <div class="format-name">Halaman Web HTML</div>
+                                <div class="format-desc">Format .html (Bisa Dibuka di Browser)</div>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Eksekusi Konversi -->
+                        <div style="margin-top:1.2rem; display:flex; justify-content:flex-end; gap:10px; align-items:center;">
+                            <span id="selectedFormatHint" style="font-size:0.85rem; color:var(--gray-500); font-weight:600;">Format terpilih: Microsoft Word (.doc)</span>
+                            <button class="btn-primary-action" id="btnExecuteConvert" style="font-size:1rem; padding:0.85rem 1.6rem;" onclick="executePdfConversion()">⚡ Mulai Konversi Sekarang</button>
+                        </div>
+
+                        <!-- Progress Bar Status -->
+                        <div class="convert-status-bar hidden" id="convertStatusBar">
+                            <div class="convert-progress-fill" id="convertProgressFill"></div>
+                        </div>
+                        <p id="convertStatusText" class="hidden" style="font-size:0.85rem; color:var(--primary); margin-top:8px; font-weight:600;">Memproses konversi...</p>
+
+                        <!-- Kotak Hasil Unduhan -->
+                        <div class="hidden" id="convertResultBox" style="margin-top:1.25rem; padding:1.2rem; background:#ecfdf5; border:1.5px solid #a7f3d0; border-radius:10px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                                <div>
+                                    <h5 style="color:#065f46; font-weight:700; font-size:1.05rem; margin:0;">🎉 Konversi Berhasil!</h5>
+                                    <p style="font-size:0.85rem; color:#047857; margin-top:3px;" id="convertResultStats">File siap diunduh.</p>
+                                </div>
+                                <a id="btnDownloadConverted" class="btn-primary-action" style="background:#10b981; text-decoration:none; padding:0.75rem 1.4rem;" download="hasil_konversi">⬇️ Unduh Berkas Hasil Konversi</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Highlights & Info -->
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 data-i18n="card1Title">Target Ukuran KB / MB</h3>
+                <p data-i18n="card1Desc">Gak perlu bingung hitung manual. Cukup ketik mau berapa KB (misal 200 KB atau 500 KB CPNS), file langsung pas di bawah batas maksimal!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📐</div>
+                <h3 data-i18n="card2Title">Edit Dimensi & Pas Foto</h3>
+                <p data-i18n="card2Desc">Bikin pas foto formal 2x3, 3x4, 4x6 yang rapi dan gak gepeng buat ijazah, pendaftaran kerja, visa, atau bikin foto medsos keren.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📑</div>
+                <h3 data-i18n="card3Title">Merge, Split & Organize</h3>
+                <p data-i18n="card3Desc">Satukan banyak berkas, ambil halaman yang kamu butuhin aja, putar halaman terbalik, atau buang lembaran yang salah.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3 data-i18n="card4Title">Privat & Cepat di Perangkat</h3>
+                <p data-i18n="card4Desc">Semua file diproses langsung di browsermu sendiri. Gak ada yang diunggah ke internet, privasimu dijamin 100% aman!</p>
+            </div>
+        </section>
+
+        <!-- SEO Rich Content, FAQ & Contact Detail Section -->
+        <section class="app-container" style="margin-top: 1rem;">
+            <article class="main-card" style="line-height: 1.8;">
+                <h2 style="font-size: 1.45rem; color: var(--dark); margin-bottom: 0.8rem;">Tips Praktis Kompres Berkas & Bikin Pas Foto Anti Gagal</h2>
+                <p style="color: var(--gray-700); margin-bottom: 1rem;">
+                    Pernah gak sih kesel pas mau daftar CPNS, BUMN, beasiswa, atau visa tapi file dokumen kamu ditolak terus gara-gara ukurannya kegedean? Misalnya portal cuma nerima maksimal <strong>200 KB, 300 KB, atau 500 KB</strong>. Di <strong>KompresMiniMax</strong>, kamu bisa bereskan semuanya dalam hitungan detik tanpa ribet instal aplikasi tambahan!
+                </p>
+
+                <h3 style="font-size: 1.15rem; color: var(--dark); margin-top: 1.2rem; margin-bottom: 0.4rem;">1. Cara Bikin File Pas 200 KB Buat Pendaftaran</h3>
+                <p style="color: var(--gray-700); margin-bottom: 0.8rem;">
+                    Gak perlu lagi tebak-tebak persentase kompresi sampai file jadi buram. Cukup pilih opsi <em>Pas Ukuran Tertentu (KB/MB)</em>, masukkan angka <code>200 KB</code>, lalu masukkan dokumen atau foto ijazah kamu. Mesin pintar kami bakal menyesuaikan kualitasnya otomatis supaya ukurannya pas di bawah batas portal pendaftaran tanpa merusak tulisan penting di dalamnya.
+                </p>
+
+                <h3 style="font-size: 1.15rem; color: var(--dark); margin-top: 1.2rem; margin-bottom: 0.4rem;">2. Bikin Pas Foto 2x3, 3x4, dan 4x6 yang Rapi & Proporsional</h3>
+                <p style="color: var(--gray-700); margin-bottom: 0.8rem;">
+                    Mau cetak pas foto atau upload ke formulir online? Pilihan preset ukuran di sini sudah disesuaikan dengan standar resolusi cetak terbaik (300 DPI):
+                </p>
+                <ul style="margin-left: 1.5rem; color: var(--gray-700); margin-bottom: 1.2rem;">
+                    <li><strong>Pas Foto 2x3 cm:</strong> 236 × 354 piksel (Cocok buat formulir pendaftaran umum).</li>
+                    <li><strong>Pas Foto 3x4 cm:</strong> 354 × 472 piksel (Ukuran standar wajib SSCASN CPNS & BUMN).</li>
+                    <li><strong>Pas Foto 4x6 cm:</strong> 472 × 709 piksel (Wajib buat paspor, visa internasional, & buku ijazah).</li>
+                </ul>
+
+                <h3 style="font-size: 1.25rem; color: var(--dark); margin-top: 1.5rem; margin-bottom: 0.6rem;">Tanya Jawab Singkat (FAQ)</h3>
+                <div style="border-top: 1px solid var(--gray-200); padding-top: 0.8rem;">
+                    <h4 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin-top: 0.6rem;">Q: Foto KTP atau dokumen penting saya aman gak di sini?</h4>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;">A: Tenang, 100% aman! Semua proses kompresi dan potong foto berjalan langsung di HP atau laptopmu sendiri (Client-Side). File kamu sama sekali gak pernah diunggah atau disimpan ke server internet mana pun.</p>
+
+                    <h4 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin-top: 0.8rem;">Q: Apakah layanan ini gratis dan ada watermark-nya?</h4>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;">A: KompresMiniMax 100% gratis selamanya, tanpa batasan jumlah file harian, dan hasilnya bersih tanpa cap watermark apa pun.</p>
+
+                    <h4 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin-top: 0.8rem;">Q: Tulisan di dokumen PDF-nya bakal buram gak setelah dikompres?</h4>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;">A: Gak perlu khawatir! Sistem kami mengutamakan kejelasan teks dan angka penting agar berkasmu tetap tajam dan lolos seleksi berkas SSCASN dengan lancar.</p>
+                </div>
+
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 <strong>KompresMiniMax</strong>. Hak Cipta Dilindungi.</p>
+        <p style="margin-top: 6px;">
+            <a href="privacy.html" style="color: var(--gray-500); text-decoration: none; margin: 0 10px;">Kebijakan Privasi</a> |
+            <a href="terms.html" style="color: var(--gray-500); text-decoration: none; margin: 0 10px;">Syarat Ketentuan</a> |
+            <a href="about.html" style="color: var(--gray-500); text-decoration: none; margin: 0 10px;">Tentang Kami</a> |
+            <a href="contact.html" style="color: var(--gray-500); text-decoration: none; margin: 0 10px;">Kontak Kami</a>
+        </p>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

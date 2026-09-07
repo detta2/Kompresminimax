@@ -1,0 +1,2 @@
+# Kompresminimax
+# Kompresminimax

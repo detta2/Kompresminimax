@@ -1,0 +1,68 @@
+::1 - - [08/Sep/2026 02:11:51] "HEAD / HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:11:59] "HEAD /robots.txt HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:11:59] "HEAD /sitemap.xml HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:12:31] code 404, message File not found
+::1 - - [08/Sep/2026 02:12:31] "GET /kompresminimax/contact.html HTTP/1.1" 404 -
+::1 - - [08/Sep/2026 02:12:32] code 404, message File not found
+::1 - - [08/Sep/2026 02:12:32] "GET /kompresminimax/contact.html HTTP/1.1" 404 -
+::1 - - [08/Sep/2026 02:14:22] "HEAD /contact.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:14:22] "HEAD /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:16:33] code 404, message File not found
+::1 - - [08/Sep/2026 02:16:33] "GET /kompresminimax/contact.html HTTP/1.1" 404 -
+::1 - - [08/Sep/2026 02:16:34] code 404, message File not found
+::1 - - [08/Sep/2026 02:16:34] "GET /kompresminimax/contact.html HTTP/1.1" 404 -
+::1 - - [08/Sep/2026 02:16:35] code 404, message File not found
+::1 - - [08/Sep/2026 02:16:35] "GET /kompresminimax/contact.html HTTP/1.1" 404 -
+::1 - - [08/Sep/2026 02:16:36] code 404, message File not found
+::1 - - [08/Sep/2026 02:16:36] "GET /kompresminimax/contact.html HTTP/1.1" 404 -
+::1 - - [08/Sep/2026 02:16:59] "GET / HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:16:59] "GET /app.css HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:16:59] "GET /app.js HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:17:01] "GET / HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 02:17:07] "GET /about.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:17:09] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:17:10] "GET /contact.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:19:01] "GET /contact.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:20:24] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 02:20:24] "GET /app.css HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 02:20:24] "GET /app.js HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 02:20:26] "GET /about.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 02:20:30] "GET /contact.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:32:11] "HEAD /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:32:11] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:34:36] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:34:36] "GET /app.css HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 02:34:36] "GET /app.js HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:56:34] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:56:34] "GET /app.css HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 02:56:34] "GET /app.js HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:04:52] "HEAD /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:04:55] "HEAD /app.js HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:04:55] "HEAD /app.css HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:05:54] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:05:54] "GET /app.css HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:05:54] "GET /app.js HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:06:31] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:11:03] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:11:03] "GET /app.css HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:11:03] "GET /app.js HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:12:15] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:12:21] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:12:26] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:13:10] "GET /index.html HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:13:10] "GET /app.css HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:13:10] "GET /app.js HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:15:04] "HEAD /logo.svg HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:15:12] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:15:12] "GET /app.css HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:15:12] "GET /app.js HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:15:12] "GET /logo.svg HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:18:10] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:18:24] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:18:24] "GET /app.css HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:18:24] "GET /app.js HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:18:24] "GET /logo.svg HTTP/1.1" 304 -
+::1 - - [08/Sep/2026 03:34:25] "GET /index.html HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:34:25] "GET /app.css HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:34:25] "GET /app.js HTTP/1.1" 200 -
+::1 - - [08/Sep/2026 03:34:25] "GET /logo.svg HTTP/1.1" 304 -

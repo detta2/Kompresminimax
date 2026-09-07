@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /index.html.bak
+
+Sitemap: https://kompresminimax.app/sitemap.xml
