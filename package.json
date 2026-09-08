@@ -1,0 +1,10 @@
+{
+  "name": "kompresminimax",
+  "version": "1.0.0",
+  "description": "KompresMiniMax - Client-side Image, Video, and PDF Compressor",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static build ready'",
+    "vercel-build": "echo 'Static build ready'"
+  }
+}
