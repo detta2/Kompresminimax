@@ -1897,3 +1897,17 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => {
+                console.log('[KompresMiniMax] SW registered:', reg.scope);
+            })
+            .catch(err => {
+                console.warn('[KompresMiniMax] SW registration failed:', err);
+            });
+    });
+}
