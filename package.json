@@ -4,7 +4,7 @@
   "description": "KompresMiniMax - Client-side Image, Video, and PDF Compressor",
   "private": true,
   "scripts": {
-    "build": "echo 'Static build ready'",
-    "vercel-build": "echo 'Static build ready'"
+    "build": "node build.js",
+    "vercel-build": "node build.js"
   }
 }

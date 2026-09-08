@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "kompresminimax",
+  "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
