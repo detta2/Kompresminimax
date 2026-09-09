@@ -222,6 +222,9 @@
               <span>Simpan Audio (MP3 320k)</span>
             </button>
           </div>
+
+          <!-- Real-time Download Feedback & Progress Box -->
+          <div id="dlStatusBox" class="hidden mt-3.5 p-3 rounded-2xl transition-all"></div>
         </div>
       </div>
     </div>
@@ -427,7 +430,7 @@
     </div>
   </footer>
 
-  <!-- Frontend Logic -->
+    <!-- Frontend Logic -->
   <script>
     const form = document.getElementById('urlForm');
     const urlInput = document.getElementById('urlInput');
@@ -441,17 +444,33 @@
 
     let currentUrl = "";
 
-    // Paste button support
+    // Auto-analyze helper
+    function autoSubmitIfUrl(val) {
+      if (!val) return;
+      const clean = val.trim();
+      if (/^https?:\/\//i.test(clean)) {
+        urlInput.value = clean;
+        form.dispatchEvent(new Event('submit'));
+      }
+    }
+
+    // Auto paste dari clipboard saat tombol Tempel diklik
     pasteBtn.addEventListener('click', async () => {
       try {
         const text = await navigator.clipboard.readText();
         if (text) {
-          urlInput.value = text.trim();
-          urlInput.focus();
+          autoSubmitIfUrl(text);
         }
       } catch (e) {
         urlInput.focus();
       }
+    });
+
+    // Auto proses begitu user paste link (Ctrl+V atau tempel di keyboard)
+    urlInput.addEventListener('paste', (e) => {
+      setTimeout(() => {
+        autoSubmitIfUrl(urlInput.value);
+      }, 100);
     });
 
     function showAlert(msg, isError = false) {
@@ -573,45 +592,128 @@
       }
     });
 
+    // Langsung unduh native via browser (seperti Savefrom / SSSTikTok / y2mate)
     async function triggerDownload(format) {
-      const btn = format === 'mp4' ? document.getElementById('dlMp4Btn') : document.getElementById('dlMp3Btn');
-      const originalText = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = `<span class="animate-pulse">Menyiapkan Berkas...</span>`;
+      if (!currentUrl) return;
+
+      const mp4Btn = document.getElementById('dlMp4Btn');
+      const mp3Btn = document.getElementById('dlMp3Btn');
+      const activeBtn = format === 'mp4' ? mp4Btn : mp3Btn;
+      const originalText = activeBtn.innerHTML;
+      const statusBox = document.getElementById('dlStatusBox');
+
+      // Kunci kedua tombol selama proses berlangsung
+      mp4Btn.disabled = true;
+      mp3Btn.disabled = true;
+
+      activeBtn.innerHTML = `
+        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Memproses...</span>
+      `;
+
+      if (statusBox) {
+        statusBox.className = 'mt-3.5 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-3';
+        statusBox.innerHTML = `
+          <svg class="w-5 h-5 text-amber-600 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <div class="flex-1">
+            <p class="font-bold">Sedang menyiapkan ${format === 'mp3' ? 'Audio MP3 320kbps' : 'Video MP4'}...</p>
+            <p class="text-[11px] text-amber-700">Proses download & konversi sedang berlangsung di server backend.</p>
+          </div>
+        `;
+        statusBox.classList.remove('hidden');
+      }
+
+      const downloadUrl = `/api/download?url=${encodeURIComponent(currentUrl)}&format=${format}`;
 
       try {
-        const res = await fetch('/api/download', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: currentUrl, format: format })
-        });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.detail || 'Pengunduhan gagal');
+        const response = await fetch(downloadUrl);
+        if (!response.ok) {
+          let errDetail = 'Gagal mengunduh berkas.';
+          try {
+            const errJson = await response.json();
+            if (errJson.detail) errDetail = errJson.detail;
+          } catch(e) {}
+          throw new Error(errDetail);
         }
 
-        const blob = await res.blob();
-        const disposition = res.headers.get('Content-Disposition');
-        let filename = `y2minimax_${Date.now()}.${format}`;
-        if (disposition && disposition.indexOf('filename=') !== -1) {
-          const matches = /filename="([^"]+)"/.exec(disposition);
-          if (matches != null && matches[1]) filename = matches[1];
+        let filename = `${(document.getElementById('mediaTitle')?.textContent || 'unduhan').trim()}.${format}`;
+        const disposition = response.headers.get('Content-Disposition');
+        if (disposition) {
+          const matchUtf8 = disposition.match(/filename\*=UTF-8''([^;\n]+)/i);
+          const matchAscii = disposition.match(/filename=(?:(["'])(.*?)\1|([^;\n]+))/i);
+          if (matchUtf8 && matchUtf8[1]) {
+            filename = decodeURIComponent(matchUtf8[1]);
+          } else if (matchAscii && (matchAscii[2] || matchAscii[3])) {
+            filename = decodeURIComponent(matchAscii[2] || matchAscii[3]);
+          }
         }
 
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(downloadUrl);
-        a.remove();
+        if (statusBox) {
+          statusBox.className = 'mt-3.5 p-3.5 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900 text-xs flex items-center gap-3';
+          statusBox.innerHTML = `
+            <svg class="w-5 h-5 text-teal-600 shrink-0 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+            </svg>
+            <div class="flex-1 min-w-0">
+              <p class="font-bold">Menerima berkas...</p>
+              <p class="text-[11px] text-teal-700 truncate">${filename}</p>
+            </div>
+          `;
+        }
+
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+
+        if (statusBox) {
+          statusBox.className = 'mt-3.5 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3';
+          statusBox.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+              <div class="min-w-0">
+                <p class="font-bold">Unduhan Berhasil Disimpan!</p>
+                <p class="text-[11px] text-emerald-700 truncate max-w-xs">${filename}</p>
+              </div>
+            </div>
+            <a href="${blobUrl}" download="${filename}" class="w-full sm:w-auto px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-center text-xs shadow-sm transition">
+              Simpan Ulang
+            </a>
+          `;
+        }
+
+        setTimeout(() => {
+          link.remove();
+        }, 5000);
+
       } catch (err) {
-        showAlert(err.message, true);
+        if (statusBox) {
+          statusBox.className = 'mt-3.5 p-3.5 rounded-2xl bg-red-50 border border-red-200 text-red-900 text-xs flex items-center gap-2.5';
+          statusBox.innerHTML = `
+            <span class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shrink-0">!</span>
+            <div class="flex-1">
+              <p class="font-bold">Gagal Mengunduh</p>
+              <p class="text-[11px] text-red-700">${err.message}</p>
+            </div>
+          `;
+        } else {
+          showAlert(err.message, true);
+        }
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        mp4Btn.disabled = false;
+        mp3Btn.disabled = false;
+        activeBtn.innerHTML = originalText;
       }
     }
 
