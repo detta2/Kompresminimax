@@ -1,4 +1,1 @@
 # Kompresminimax
-# Kompresminimax
-# Kompresminimax
-# Kompresminimax
