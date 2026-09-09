@@ -5,44 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>y2minimax - Pengunduh Video & Audio YouTube, TikTok, Instagram Gratis</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          },
+          boxShadow: {
+            'soft': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+            'card': '0 20px 40px -15px rgba(16, 185, 129, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.03)',
+            'glow': '0 0 35px -5px rgba(16, 185, 129, 0.25)'
+          }
+        }
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { 
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; 
+    }
+    .bg-mesh {
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(16, 185, 129, 0.08) 0px, transparent 45%),
+        radial-gradient(at 85% 10%, rgba(14, 165, 233, 0.08) 0px, transparent 45%),
+        radial-gradient(at 50% 85%, rgba(244, 63, 94, 0.04) 0px, transparent 50%);
+    }
     .glass-panel {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(226, 232, 240, 0.9);
     }
     .glass-card {
-      background: rgba(30, 41, 59, 0.5);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(241, 245, 249, 1);
     }
-    .hero-glow {
-      background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.18) 0%, rgba(14, 165, 233, 0.1) 45%, transparent 70%);
+    .gradient-title {
+      background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #0284c7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-white flex flex-col justify-between">
+<body class="bg-mesh text-slate-800 min-h-screen selection:bg-emerald-500 selection:text-white flex flex-col justify-between transition-colors duration-300">
 
-  <!-- Ambient background glow -->
-  <div class="fixed inset-0 hero-glow pointer-events-none -z-10"></div>
-  <div class="fixed top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
-  <div class="fixed bottom-10 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <!-- Ambient Glow Elements -->
+  <div class="fixed top-10 left-10 w-96 h-96 bg-emerald-300/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed bottom-10 right-10 w-96 h-96 bg-cyan-300/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
   <!-- Navigation Bar -->
-  <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+  <header class="sticky top-0 z-50 glass-panel border-b border-slate-200/80">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
       
       <!-- Brand & Dino Logo -->
       <a href="#" class="flex items-center gap-3 group">
-        <div class="relative w-10 h-10 flex items-center justify-center bg-gradient-to-br from-emerald-500/20 via-slate-900 to-slate-950 rounded-xl p-1 shadow-md shadow-emerald-500/15 border border-emerald-500/30 group-hover:scale-105 transition-transform">
-          <!-- Dinosaur holding YouTube Icon -->
+        <div class="relative w-10 h-10 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 rounded-2xl p-1 shadow-sm border border-emerald-200 group-hover:scale-105 group-hover:shadow-md transition-all duration-300">
           <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
-            <path d="M14 44C9 42 6 47 4 49C7 51 12 49 14 45" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+            <path d="M14 44C9 42 6 47 4 49C7 51 12 49 14 45" stroke="#059669" stroke-width="3" stroke-linecap="round"/>
             <path d="M14 44C16 50 20 54 28 54C36 54 40 48 41 42C42 36 40 32 36 28C34 26 33 22 33 16C33 10 28 6 20 6C13 6 11 11 11 16C11 22 14 25 15 28C16 31 16 38 14 44Z" fill="#10b981"/>
             <path d="M20 6H31C34 6 37 8 37 12C37 16 33 18 29 18H20V6Z" fill="#34d399"/>
             <circle cx="26" cy="11" r="2.5" fill="#064e3b"/>
@@ -59,23 +91,23 @@
           </svg>
         </div>
         <div class="flex flex-col">
-          <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-200 to-white">y2minimax</span>
-          <span class="text-[10px] text-slate-400 -mt-1 font-medium">Fast Media Grabber</span>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900 leading-none">y2<span class="gradient-title">minimax</span></span>
+          <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Media Downloader HD</span>
         </div>
       </a>
 
       <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
-        <a href="#downloader" class="hover:text-emerald-400 transition-colors">Downloader</a>
-        <a href="#features" class="hover:text-emerald-400 transition-colors">Fitur Unggulan</a>
-        <a href="#how-it-works" class="hover:text-emerald-400 transition-colors">Cara Kerja</a>
-        <a href="#faq" class="hover:text-emerald-400 transition-colors">FAQ</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
+        <a href="#downloader" class="hover:text-emerald-600 transition-colors">Downloader</a>
+        <a href="#features" class="hover:text-emerald-600 transition-colors">Fitur Unggulan</a>
+        <a href="#how-it-works" class="hover:text-emerald-600 transition-colors">Cara Kerja</a>
+        <a href="#faq" class="hover:text-emerald-600 transition-colors">FAQ</a>
       </nav>
 
       <!-- Engine Status Indicator -->
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-xs font-semibold">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-slate-300">Engine V2.4 Aktif</span>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700 shadow-2xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Engine V2.4 Aktif</span>
       </div>
 
     </div>
@@ -85,47 +117,47 @@
   <section id="downloader" class="max-w-4xl mx-auto px-4 sm:px-6 pt-12 pb-16 w-full text-center">
     
     <!-- Version Tag -->
-    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-semibold mb-6 shadow-sm">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold mb-6 shadow-xs">
       <span class="flex h-2 w-2 relative">
         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
       </span>
-      Kini Mendukung Unduh TikTok Tanpa Watermark & Reels HD
+      Unduh TikTok Tanpa Watermark & Reels HD
     </div>
 
     <!-- Main Heading -->
-    <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
+    <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
       Download Video & Lagu <br class="hidden sm:inline"/>
-      <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+      <span class="gradient-title">
         Cepat, Bersih & Gratis
       </span>
     </h1>
 
-    <p class="mt-4 text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
-      Konversi dan simpan konten dari YouTube, TikTok, dan Instagram langsung ke format MP4 jernih atau MP3 320kbps tanpa ribet iklan pop-up.
+    <p class="mt-4 text-slate-600 text-sm sm:text-base max-w-xl mx-auto font-normal leading-relaxed">
+      Konversi dan simpan konten favorit dari YouTube, TikTok, dan Instagram langsung ke format MP4 tajam atau MP3 320kbps tanpa ribet iklan.
     </p>
 
     <!-- Interactive Input Bar -->
-    <div class="mt-8 glass-panel rounded-2xl p-2.5 sm:p-3 shadow-2xl shadow-emerald-950/20 border border-slate-700/60 max-w-3xl mx-auto">
-      <form id="urlForm" class="flex flex-col sm:flex-row gap-2">
+    <div class="mt-8 glass-panel rounded-3xl p-3 sm:p-4 shadow-card max-w-3xl mx-auto transition-all duration-300">
+      <form id="urlForm" class="flex flex-col sm:flex-row gap-2.5">
         <div class="relative flex-1 flex items-center">
           <div class="absolute left-4 text-slate-400 pointer-events-none">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
             </svg>
           </div>
           <input 
             type="text" 
             id="urlInput" 
-            placeholder="Tempel link YouTube, TikTok, atau Instagram disini..." 
-            class="w-full pl-11 pr-20 py-3.5 bg-slate-900/90 text-white rounded-xl border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-slate-500 text-sm"
+            placeholder="Tempel link YouTube, TikTok, atau Instagram di sini..."
+            class="w-full pl-11 pr-24 py-3.5 bg-white text-slate-900 rounded-2xl border border-slate-300/80 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all placeholder:text-slate-400 text-sm shadow-2xs"
             required
           />
           <button 
             type="button" 
             id="pasteBtn"
-            class="absolute right-2 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/90 hover:bg-slate-700 border border-slate-700 rounded-lg transition-all active:scale-95 flex items-center gap-1">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            class="absolute right-2 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-emerald-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl transition-all active:scale-95 flex items-center gap-1.5 shadow-2xs">
+            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
             <span>Tempel</span>
           </button>
         </div>
@@ -133,7 +165,7 @@
         <button 
           type="submit" 
           id="inspectBtn"
-          class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-emerald-600/30 active:scale-95 flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+          class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold px-7 py-3.5 rounded-2xl transition-all shadow-md shadow-emerald-600/20 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
           <span>Proses Unduh</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
@@ -143,50 +175,50 @@
     </div>
 
     <!-- Supported Platforms Quick Badges -->
-    <div class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs text-slate-400">
-      <span class="text-slate-500">Mendukung:</span>
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
-        <span class="w-2 h-2 rounded-full bg-red-500"></span> YouTube Video & Shorts
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs font-medium text-slate-600">
+      <span class="text-slate-400 font-semibold">Mendukung:</span>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 shadow-2xs hover:border-red-200 transition">
+        <span class="w-2 h-2 rounded-full bg-red-500"></span> YouTube & Shorts
       </span>
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
-        <span class="w-2 h-2 rounded-full bg-cyan-400"></span> TikTok No-Watermark
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 shadow-2xs hover:border-slate-400 transition">
+        <span class="w-2 h-2 rounded-full bg-slate-900"></span> TikTok No-WM
       </span>
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300">
-        <span class="w-2 h-2 rounded-full bg-pink-500"></span> Instagram Reels & Post
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 shadow-2xs hover:border-pink-200 transition">
+        <span class="w-2 h-2 rounded-full bg-pink-500"></span> Instagram Reels
       </span>
     </div>
 
     <!-- Alert / Status Banner -->
-    <div id="statusAlert" class="mt-4 hidden p-4 rounded-xl text-sm font-medium transition-all max-w-3xl mx-auto text-left"></div>
+    <div id="statusAlert" class="mt-4 hidden p-4 rounded-2xl text-sm font-semibold transition-all max-w-3xl mx-auto text-left shadow-sm"></div>
 
     <!-- Result Card -->
-    <div id="resultCard" class="hidden mt-6 glass-panel rounded-2xl p-6 border border-emerald-500/40 shadow-2xl transition-all max-w-3xl mx-auto text-left">
+    <div id="resultCard" class="hidden mt-6 glass-panel rounded-3xl p-6 border border-emerald-300/80 shadow-card transition-all max-w-3xl mx-auto text-left">
       <div class="flex flex-col sm:flex-row gap-5 items-start">
-        <div class="relative w-full sm:w-48 h-32 rounded-xl overflow-hidden bg-slate-900 border border-slate-700/50 shrink-0">
+        <div class="relative w-full sm:w-52 h-36 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 shadow-sm">
           <img id="mediaThumb" src="" alt="Thumbnail" class="w-full h-full object-cover">
-          <span id="mediaPlatform" class="absolute bottom-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase bg-slate-950/80 backdrop-blur-sm text-emerald-300 border border-emerald-500/30"></span>
+          <span id="mediaPlatform" class="absolute bottom-2 right-2 text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg uppercase bg-white/90 backdrop-blur-xs text-emerald-800 border border-slate-200 shadow-xs"></span>
         </div>
         
-        <div class="flex-1 space-y-2 w-full">
-          <div class="flex items-center gap-2 text-xs text-slate-400">
-            <span id="mediaDuration" class="font-medium text-emerald-400"></span>
+        <div class="flex-1 space-y-2.5 w-full">
+          <div class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+            <span id="mediaDuration" class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200"></span>
             <span>•</span>
             <span id="mediaAuthor" class="truncate"></span>
           </div>
-          <h3 id="mediaTitle" class="text-base font-bold text-white line-clamp-2 leading-snug"></h3>
+          <h3 id="mediaTitle" class="text-base sm:text-lg font-bold text-slate-900 line-clamp-2 leading-snug"></h3>
 
           <!-- Action Buttons -->
           <div class="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button 
               id="dlMp4Btn" 
-              class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-95 transition-all">
+              class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
               <span>Simpan Video (MP4 HD)</span>
             </button>
             <button 
               id="dlMp3Btn" 
-              class="w-full bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-700 active:scale-95 transition-all">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+              class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
               <span>Simpan Audio (MP3 320k)</span>
             </button>
           </div>
@@ -196,33 +228,33 @@
 
     <!-- Recent Download Local Storage Cache Widget -->
     <div id="recentSection" class="hidden mt-8 max-w-3xl mx-auto text-left">
-      <div class="flex items-center justify-between mb-3">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Riwayat Terakhir</h4>
-        <button id="clearRecentBtn" class="text-xs text-slate-500 hover:text-rose-400">Hapus Riwayat</button>
+      <div class="flex items-center justify-between mb-3 px-1">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Riwayat Terakhir</h4>
+        <button id="clearRecentBtn" class="text-xs font-semibold text-slate-400 hover:text-rose-600 transition">Hapus Riwayat</button>
       </div>
-      <div id="recentList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+      <div id="recentList" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
     </div>
 
   </section>
 
   <!-- Live Statistics Bar -->
-  <section class="border-y border-slate-800/70 bg-slate-900/40 py-8">
+  <section class="border-y border-slate-200/90 bg-white/70 backdrop-blur-md py-8">
     <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
       <div>
-        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">100%</div>
-        <div class="text-xs text-slate-400 mt-1">Gratis Tanpa Biaya</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600">100%</div>
+        <div class="text-xs text-slate-500 font-medium mt-1">Gratis Selamanya</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-extrabold text-white">0</div>
-        <div class="text-xs text-slate-400 mt-1">Iklan Pop-up Mengganggu</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">0</div>
+        <div class="text-xs text-slate-500 font-medium mt-1">Iklan Pop-up</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-extrabold text-teal-400">Ultra-HD</div>
-        <div class="text-xs text-slate-400 mt-1">Audio & Video Berkualitas</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-teal-600">Full HD</div>
+        <div class="text-xs text-slate-500 font-medium mt-1">Video & Audio Jernih</div>
       </div>
       <div>
-        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">Instant</div>
-        <div class="text-xs text-slate-400 mt-1">Direct Cloud Streaming</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600">Instan</div>
+        <div class="text-xs text-slate-500 font-medium mt-1">Direct Cloud Streaming</div>
       </div>
     </div>
   </section>
@@ -230,138 +262,139 @@
   <!-- How It Works Step Section -->
   <section id="how-it-works" class="max-w-5xl mx-auto px-4 sm:px-6 py-20">
     <div class="text-center max-w-xl mx-auto mb-14">
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Cara Download Hanya 3 Langkah</h2>
-      <p class="text-slate-400 text-sm mt-2">Tidak perlu aplikasi tambahan, ekstensi browser, atau registrasi akun.</p>
+      <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Langkah Mudah</div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Cara Download Hanya 3 Langkah</h2>
+      <p class="text-slate-600 text-sm mt-2">Tidak butuh instalasi aplikasi tambahan, ekstensi, ataupun login akun.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       
-      <div class="glass-card p-6 rounded-2xl relative border-slate-800 hover:border-emerald-500/40 transition-all group">
-        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-black text-xl mb-4 group-hover:scale-110 transition-transform">1</div>
-        <h3 class="text-base font-bold text-white mb-1">Salin Tautan (Copy Link)</h3>
-        <p class="text-sm text-slate-400">Buka YouTube, TikTok, atau Instagram. Klik tombol Bagikan (Share) dan salin URL konten yang diinginkan.</p>
+      <div class="glass-card p-6 rounded-3xl relative shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200 group">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center font-black text-xl mb-4 group-hover:scale-105 transition-transform">1</div>
+        <h3 class="text-base font-bold text-slate-900 mb-1.5">Salin Tautan (Copy Link)</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">Buka YouTube, TikTok, atau Instagram. Klik tombol Bagikan (Share) dan salin URL konten yang diinginkan.</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl relative border-slate-800 hover:border-emerald-500/40 transition-all group">
-        <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center font-black text-xl mb-4 group-hover:scale-110 transition-transform">2</div>
-        <h3 class="text-base font-bold text-white mb-1">Tempel & Klik Proses</h3>
-        <p class="text-sm text-slate-400">Tempelkan tautan ke kolom input y2minimax di atas, lalu tekan tombol "Proses Unduh".</p>
+      <div class="glass-card p-6 rounded-3xl relative shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200 group">
+        <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center font-black text-xl mb-4 group-hover:scale-105 transition-transform">2</div>
+        <h3 class="text-base font-bold text-slate-900 mb-1.5">Tempel & Klik Proses</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">Tempelkan tautan ke kolom input y2minimax di atas, lalu tekan tombol "Proses Unduh".</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl relative border-slate-800 hover:border-emerald-500/40 transition-all group">
-        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-black text-xl mb-4 group-hover:scale-110 transition-transform">3</div>
-        <h3 class="text-base font-bold text-white mb-1">Pilih MP4 atau MP3</h3>
-        <p class="text-sm text-slate-400">Pilih format video atau audio yang diinginkan. File langsung otomatis tersimpan ke perangkat kamu.</p>
+      <div class="glass-card p-6 rounded-3xl relative shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200 group">
+        <div class="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 border border-cyan-100 flex items-center justify-center font-black text-xl mb-4 group-hover:scale-105 transition-transform">3</div>
+        <h3 class="text-base font-bold text-slate-900 mb-1.5">Pilih MP4 atau MP3</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">Pilih format video atau audio yang diinginkan. File langsung otomatis tersimpan ke perangkat kamu.</p>
       </div>
 
     </div>
   </section>
 
   <!-- Features Grid Section -->
-  <section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-800/80">
+  <section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-200/90">
     <div class="text-center max-w-xl mx-auto mb-14">
-      <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">Keunggulan Utama</div>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Mengapa Menggunakan y2minimax?</h2>
+      <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Keunggulan Utama</div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Mengapa Menggunakan y2minimax?</h2>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition-all">
-        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
+      <div class="glass-card p-6 rounded-3xl shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mb-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
-        <h4 class="font-bold text-white mb-1">Konversi Kilat</h4>
-        <p class="text-sm text-slate-400">Didukung arsitektur backend berkecepatan tinggi yang mengekstrak media dalam hitungan detik.</p>
+        <h4 class="font-bold text-slate-900 mb-1">Konversi Kilat</h4>
+        <p class="text-sm text-slate-600 leading-relaxed">Didukung arsitektur backend berkecepatan tinggi yang mengekstrak media dalam hitungan detik.</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition-all">
-        <div class="w-10 h-10 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center mb-4">
+      <div class="glass-card p-6 rounded-3xl shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200">
+        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center mb-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         </div>
-        <h4 class="font-bold text-white mb-1">Tanpa Watermark TikTok</h4>
-        <p class="text-sm text-slate-400">Unduh video TikTok tanpa tanda air atau logo aplikasi untuk hasil video yang bersih.</p>
+        <h4 class="font-bold text-slate-900 mb-1">Tanpa Watermark TikTok</h4>
+        <p class="text-sm text-slate-600 leading-relaxed">Unduh video TikTok murni tanpa tanda air atau logo aplikasi untuk hasil video yang bersih.</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-4">
+      <div class="glass-card p-6 rounded-3xl shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200">
+        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center mb-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
         </div>
-        <h4 class="font-bold text-white mb-1">Audio Jernih MP3 320kbps</h4>
-        <p class="text-sm text-slate-400">Ekstraksi soundtrack dan musik original dengan bitrate optimal untuk didengarkan secara offline.</p>
+        <h4 class="font-bold text-slate-900 mb-1">Audio Jernih MP3 320kbps</h4>
+        <p class="text-sm text-slate-600 leading-relaxed">Ekstraksi soundtrack dan musik original dengan bitrate optimal untuk didengarkan secara offline.</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition-all">
-        <div class="w-10 h-10 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center mb-4">
+      <div class="glass-card p-6 rounded-3xl shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200">
+        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center mb-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         </div>
-        <h4 class="font-bold text-white mb-1">Privasi & Pembersihan Otomatis</h4>
-        <p class="text-sm text-slate-400">File sementara otomatis dihapus dari server setelah selesai diunduh. Tidak ada riwayat yang bocor.</p>
+        <h4 class="font-bold text-slate-900 mb-1">Privasi & Bersih Otomatis</h4>
+        <p class="text-sm text-slate-600 leading-relaxed">File sementara otomatis dihapus dari sistem setelah selesai diunduh demi melindungi privasi.</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition-all">
-        <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4">
+      <div class="glass-card p-6 rounded-3xl shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200">
+        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center mb-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
         </div>
-        <h4 class="font-bold text-white mb-1">Semua Perangkat Mendukung</h4>
-        <p class="text-sm text-slate-400">Bisa dibuka dari HP Android, iPhone / iPad, PC Windows, Mac OS, maupun Linux via browser web.</p>
+        <h4 class="font-bold text-slate-900 mb-1">Semua Perangkat Mendukung</h4>
+        <p class="text-sm text-slate-600 leading-relaxed">Bisa diakses mulus dari ponsel Android, iPhone/iPad, PC Windows, MacOS, maupun Linux.</p>
       </div>
 
-      <div class="glass-card p-6 rounded-2xl border-slate-800 hover:border-slate-700 transition-all">
-        <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center mb-4">
+      <div class="glass-card p-6 rounded-3xl shadow-soft hover:shadow-card hover:-translate-y-1 transition duration-200">
+        <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center mb-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
         </div>
-        <h4 class="font-bold text-white mb-1">Selalu Terupdate</h4>
-        <p class="text-sm text-slate-400">Algoritma ekstraksi otomatis diperbarui berkala mengikuti update protokol YouTube dan TikTok.</p>
+        <h4 class="font-bold text-slate-900 mb-1">Selalu Terupdate</h4>
+        <p class="text-sm text-slate-600 leading-relaxed">Algoritma ekstraksi otomatis mengikuti update API dan protokol YouTube, Instagram, dan TikTok.</p>
       </div>
 
     </div>
   </section>
 
   <!-- FAQ Accordion Section -->
-  <section id="faq" class="max-w-3xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-800/80">
+  <section id="faq" class="max-w-3xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-200/90">
     <div class="text-center mb-10">
-      <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">Bantuan</div>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Pertanyaan yang Sering Diajukan (FAQ)</h2>
+      <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">Bantuan</div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Pertanyaan yang Sering Diajukan (FAQ)</h2>
     </div>
 
     <div class="space-y-3">
       
-      <details class="glass-card rounded-xl p-4 border-slate-800 group">
-        <summary class="font-bold text-white cursor-pointer flex justify-between items-center text-sm sm:text-base select-none">
+      <details class="glass-card rounded-2xl p-4 sm:p-5 shadow-soft group cursor-pointer transition">
+        <summary class="font-bold text-slate-800 cursor-pointer flex justify-between items-center text-sm sm:text-base select-none list-none">
           <span>Apakah layanan y2minimax benar-benar gratis?</span>
-          <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+          <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
         </summary>
-        <p class="text-sm text-slate-400 mt-3 pt-3 border-t border-slate-800">
-          Ya, 100% gratis! Kamu tidak perlu membayar biaya langganan apapun dan dapat mengunduh media tanpa batasan kuota harian.
+        <p class="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+          Ya, 100% gratis! Kamu tidak perlu berlangganan apapun dan bebas mengunduh media tanpa batasan kuota harian.
         </p>
       </details>
 
-      <details class="glass-card rounded-xl p-4 border-slate-800 group">
-        <summary class="font-bold text-white cursor-pointer flex justify-between items-center text-sm sm:text-base select-none">
+      <details class="glass-card rounded-2xl p-4 sm:p-5 shadow-soft group cursor-pointer transition">
+        <summary class="font-bold text-slate-800 cursor-pointer flex justify-between items-center text-sm sm:text-base select-none list-none">
           <span>Di mana file yang sudah diunduh tersimpan?</span>
-          <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+          <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
         </summary>
-        <p class="text-sm text-slate-400 mt-3 pt-3 border-t border-slate-800">
-          File akan otomatis masuk ke folder default download perangkat kamu (biasanya folder "Downloads" di Android, Windows, atau galeri perangkat iOS).
+        <p class="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
+          File akan otomatis masuk ke folder default unduhan perangkat kamu (folder "Downloads" di Android, Windows, Mac atau Files di iOS).
         </p>
       </details>
 
-      <details class="glass-card rounded-xl p-4 border-slate-800 group">
-        <summary class="font-bold text-white cursor-pointer flex justify-between items-center text-sm sm:text-base select-none">
+      <details class="glass-card rounded-2xl p-4 sm:p-5 shadow-soft group cursor-pointer transition">
+        <summary class="font-bold text-slate-800 cursor-pointer flex justify-between items-center text-sm sm:text-base select-none list-none">
           <span>Apakah bisa mendownload video dari akun privat?</span>
-          <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+          <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
         </summary>
-        <p class="text-sm text-slate-400 mt-3 pt-3 border-t border-slate-800">
+        <p class="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
           Demi alasan privasi dan keamanan platform, y2minimax hanya mendukung pengunduhan konten publik yang tidak dikunci atau dibatasi usia khusus login.
         </p>
       </details>
 
-      <details class="glass-card rounded-xl p-4 border-slate-800 group">
-        <summary class="font-bold text-white cursor-pointer flex justify-between items-center text-sm sm:text-base select-none">
+      <details class="glass-card rounded-2xl p-4 sm:p-5 shadow-soft group cursor-pointer transition">
+        <summary class="font-bold text-slate-800 cursor-pointer flex justify-between items-center text-sm sm:text-base select-none list-none">
           <span>Apakah video TikTok terunduh tanpa watermark?</span>
-          <span class="text-emerald-400 group-open:rotate-180 transition-transform">▼</span>
+          <span class="text-emerald-600 group-open:rotate-180 transition-transform">▼</span>
         </summary>
-        <p class="text-sm text-slate-400 mt-3 pt-3 border-t border-slate-800">
+        <p class="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100 leading-relaxed">
           Betul! Engine y2minimax secara default mengambil feed video asli langsung dari CDN TikTok sehingga video terbebas dari watermark yang melayang.
         </p>
       </details>
@@ -370,26 +403,26 @@
   </section>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-800 bg-slate-950/80 pt-12 pb-8 text-xs text-slate-500">
+  <footer class="border-t border-slate-200 bg-white/80 backdrop-blur-md pt-10 pb-8 text-xs text-slate-500">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         
         <div class="flex items-center gap-2">
-          <span class="text-base font-extrabold text-white">y2minimax</span>
-          <span>— High Speed Media Grabber Engine</span>
+          <span class="text-base font-extrabold text-slate-900">y2<span class="gradient-title">minimax</span></span>
+          <span class="text-slate-400">— High Speed Media Grabber Engine</span>
         </div>
 
-        <div class="flex gap-6 text-slate-400">
-          <a href="#downloader" class="hover:text-emerald-400 transition-colors">Beranda</a>
-          <a href="#features" class="hover:text-emerald-400 transition-colors">Fitur</a>
-          <a href="#how-it-works" class="hover:text-emerald-400 transition-colors">Panduan</a>
-          <a href="#faq" class="hover:text-emerald-400 transition-colors">Bantuan</a>
+        <div class="flex gap-6 text-slate-600 font-medium">
+          <a href="#downloader" class="hover:text-emerald-600 transition-colors">Beranda</a>
+          <a href="#features" class="hover:text-emerald-600 transition-colors">Fitur</a>
+          <a href="#how-it-works" class="hover:text-emerald-600 transition-colors">Panduan</a>
+          <a href="#faq" class="hover:text-emerald-600 transition-colors">Bantuan</a>
         </div>
       </div>
 
-      <div class="pt-6 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center gap-2 text-center">
+      <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-2 text-center text-slate-400">
         <p>© 2025 y2minimax. Seluruh hak cipta dilindungi. Gunakan hanya untuk tujuan backup pribadi yang sah.</p>
-        <p class="text-slate-600">Built with Fast Engine & Native UI</p>
+        <p>Built with Fast Engine & Native Smooth UI</p>
       </div>
     </div>
   </footer>
@@ -422,11 +455,11 @@
     });
 
     function showAlert(msg, isError = false) {
-      alertBox.classList.remove('hidden', 'bg-red-500/10', 'text-red-400', 'border-red-500/30', 'bg-emerald-500/10', 'text-emerald-300', 'border-emerald-500/30');
+      alertBox.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
       if (isError) {
-        alertBox.classList.add('bg-red-500/10', 'text-red-400', 'border', 'border-red-500/30');
+        alertBox.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
       } else {
-        alertBox.classList.add('bg-emerald-500/10', 'text-emerald-300', 'border', 'border-emerald-500/30');
+        alertBox.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200');
       }
       alertBox.textContent = msg;
     }
@@ -452,11 +485,11 @@
         }
         recentSection.classList.remove('hidden');
         recentList.innerHTML = items.map(item => `
-          <div class="glass-card p-2.5 rounded-xl flex items-center gap-3 border border-slate-800 hover:border-slate-700 cursor-pointer transition-all" onclick="fillInput('${item.url}')">
-            <img src="${item.thumb}" class="w-12 h-9 object-cover rounded bg-slate-900">
+          <div class="glass-card p-2.5 rounded-2xl flex items-center gap-3 border border-slate-200/80 hover:border-emerald-300 hover:shadow-xs cursor-pointer transition-all duration-200" onclick="fillInput('${item.url}')">
+            <img src="${item.thumb}" class="w-12 h-9 object-cover rounded-xl bg-slate-100 border border-slate-200">
             <div class="flex-1 min-w-0">
-              <p class="text-xs font-semibold text-white truncate">${item.title}</p>
-              <p class="text-[10px] text-slate-400 uppercase">${item.platform}</p>
+              <p class="text-xs font-semibold text-slate-800 truncate">${item.title}</p>
+              <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wide">${item.platform}</p>
             </div>
           </div>
         `).join('');
@@ -518,6 +551,7 @@
         document.getElementById('mediaDuration').textContent = data.duration_seconds ? `Durasi ${formatTime(data.duration_seconds)}` : 'Live / Feed';
 
         resultCard.classList.remove('hidden');
+        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
         saveRecent({
           url: rawUrl,
