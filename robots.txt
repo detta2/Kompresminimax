@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /index.html.bak
 
-Sitemap: https://kompresminimax.app/sitemap.xml
+Sitemap: https://kompresminimax.vercel.app/sitemap.xml
