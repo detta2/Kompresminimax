@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /index.html.bak
 
 Sitemap: https://www.kompresminimax.online/sitemap.xml
