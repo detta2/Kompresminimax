@@ -6,5 +6,18 @@
   "scripts": {
     "build": "node build.js",
     "vercel-build": "node build.js"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/detta2/Kompresminimax.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/detta2/Kompresminimax/issues"
+  },
+  "homepage": "https://github.com/detta2/Kompresminimax#readme"
 }

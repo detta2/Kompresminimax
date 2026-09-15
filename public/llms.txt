@@ -1,0 +1,24 @@
+# KompresMiniMax - Platform Kompres PDF & Edit Pas Foto Gratis Tanpa Upload
+
+> KompresMiniMax (https://www.kompresminimax.online/) adalah aplikasi web utilitas dokumen dan foto berbasis Client-Side (100% diproses langsung di peramban pengguna tanpa kirim data ke server/cloud).
+
+## Fitur Utama
+- **Kompres PDF Spesifik CPNS & BUMN**: Perkecil ukuran dokumen PDF persis ke 100 KB, 200 KB, 300 KB, atau 500 KB tanpa membuat teks ijazah, transkrip, atau SKCK buram.
+- **Resize & Cropping Pas Foto Resmi**: Preset otomatis ukuran standar cetak & pendaftaran:
+  * 2x3 cm (236 x 354 px)
+  * 3x4 cm (354 x 472 px) - Standar SSCASN CPNS / Kedinasan
+  * 4x6 cm (472 x 709 px) - Standar Buku Nikah & BUMN
+- **Kompres Foto Tepat Ukuran**: Memperkecil gambar JPG, PNG, WEBP langsung di bawah batas maksimal 200 KB.
+- **Gabung & Pisah PDF**: Menggabungkan lampiran berkas atau mengambil halaman tertentu secara instan.
+- **Keamanan & Privasi 100%**: Zero Server Upload. Berkas KTP, KK, Ijazah, dan dokumen sensitif diolah via WebAssembly di RAM lokal pengguna.
+
+## Spesifikasi Teknis SSCASN CPNS & Rekrutmen Bersama BUMN
+- **Pas Foto Formal Latar Merah**: JPG/JPEG, maksimal 200 KB, rasio 3x4 / 4x6.
+- **Scan e-KTP**: JPG/JPEG, maksimal 200 KB.
+- **Surat Lamaran & Pernyataan**: PDF, 300 KB - 500 KB.
+- **Ijazah & STR**: PDF, maksimal 500 KB - 1000 KB.
+
+## Tautan Resmi
+- Beranda & Alat: https://www.kompresminimax.online/
+- Tentang Kami: https://www.kompresminimax.online/about.html
+- Privasi & Keamanan: https://www.kompresminimax.online/privacy.html
