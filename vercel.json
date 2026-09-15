@@ -1,9 +1,16 @@
 {
   "version": 2,
-  "name": "kompressminimax",
   "builds": [
     {
       "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.xml",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.txt",
       "use": "@vercel/static"
     }
   ],
