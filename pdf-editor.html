@@ -3,47 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit PDF - KompresMiniMax</title>
+<title>Edit PDF Gratis Online - KompresMiniMax</title>
+<meta name="description" content="Editor PDF online gratis hapus halaman putar halaman lalu unduh hasilnya langsung">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f5f7fa;min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f5f7fa;color:#333}
 .container{max-width:1200px;margin:0 auto;padding:20px}
-h1{color:#333;margin-bottom:20px;text-align:center}
-.upload-area{border:2px dashed #ccc;border-radius:8px;padding:40px;text-align:center;background:white;cursor:pointer;margin-bottom:20px}
+h1{text-align:center;margin-bottom:20px;color:#1a202c}
+.upload-area{border:2px dashed #ccc;border-radius:8px;padding:40px;text-align:center;background:white;cursor:pointer;margin-bottom:20px;transition:all 0.2s}
 .upload-area:hover{border-color:#007bff;background:#eef7ff}
 .upload-area input[type="file"]{display:none}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
-.btn{padding:10px 18px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;transition:.2s}
-.btn-primary{background:#007bff;color:#fff}
-.btn-secondary{background:#6c757d;color:#fff}
-.btn-danger{background:#dc3545;color:#fff}
-.page-container{display:flex;flex-wrap:wrap;gap:16px}
-.page-item{background:#fff;border-radius:8px;width:min(220px,45vw);box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.thumb-wrap{width:min(220px,45vw);height:min(280px,60vw);background:#eee;border-radius:6px;display:flex}
-.thumb{width:min(220px,45vw);height:min(280px,60vw);object-fit:contain}
-.pagenum{text-align:center;font-size:.9rem;margin-top:.4rem}
-.actions{display:flex;margin-top:.4rem}
-.actions button{flex:1;margin-right:.2rem;padding:.3rem;border:none;border-radius:4px;cursor:pointer;font-weight:600}
-.del{background:#fee}
-.rot{background:#eee}
-.status{text-align:center;padding:.8rem;margin:10px 0;border-radius:4px;font-weight:bold}
-.success{background:#d4edda;color:#155724}
-.error{background:#f8d7da;color:#721c24}
-.loading{text-align:center;padding:40px;color:#666}
+.btn{padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;font-size:14px;transition:opacity 0.2s}
+.btn-primary{background:#007bff;color:white}
+.btn-secondary{background:#6c757d;color:white}
+.btn:hover{opacity:0.9}
+.page-container{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.page-item{background:white;border-radius:8px;width:min(220px,45vw);box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.thumb-wrap{width:min(220px,45vw);height:min(280px,60vw);background:#eee;border-radius:6px;display:flex;overflow:hidden}
+.thumb-wrap img{width:100%;height:100%;object-fit:contain}
+.pagenum{text-align:center;font-size:0.9rem;margin-top:0.4rem;color:#555}
+.actions{display:flex;margin-top:0.4rem}
+.actions button{flex:1;margin-right:2px;padding:0.3rem;border:none;border-radius:4px;cursor:pointer;font-weight:600;font-size:12px}
+.del-btn{background:#fee;color:#c00}
+.rot-btn{background:#eee;color:#333}
+.status{text-align:center;padding:0.8rem;margin:10px 0;border-radius:4px;font-weight:bold;display:none}
+.status.ok{background:#d4edda;color:#155724;display:block}
+.status.err{background:#f8d7da;color:#721c24;display:block}
+.loading{text-align:center;padding:40px;color:#666;display:none}
 .spinner{border:4px solid #f3f3f3;border-top:4px solid #007bff;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin:0 auto 20px}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .hidden{display:none!important}
+.instruction{color:#666;margin-bottom:10px;font-size:14px;text-align:center}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>✏️ Edit PDF - KompresMiniMax</h1>
+<h1>✏️ Edit PDF Gratis</h1>
 
 <div id="uploadSection">
 <div class="upload-area" onclick="document.getElementById('pdfInput').click()">
 <input type="file" id="pdfInput" accept=".pdf" onchange="handleFile(this)">
-<p>📤 Klik untuk pilih file PDF atau drag & drop di sini</p>
-<small>Pemrosesan 100% di browser — file tidak pernah diunggah ke server.</small>
+<p><strong>Klik untuk pilih file PDF atau drag & drop di sini</strong></p>
+<small>Pemrosesan 100% di browser Anda — file tidak pernah dikirim ke server mana pun.</small>
 </div>
 </div>
 
@@ -51,14 +53,16 @@ h1{color:#333;margin-bottom:20px;text-align:center}
 <div class="toolbar">
 <button class="btn btn-primary" onclick="downloadPDF()">💾 Simpan & Unduh PDF Hasil</button>
 <button class="btn btn-secondary" onclick="resetAll()">🔄 Mulai Ulang / Ganti File</button>
-<span id="fileInfo" style="margin-left:auto;color:#555"></span>
+<span id="fileInfo" style="margin-left:auto;color:#555;"></span>
 </div>
 
-<div id="statusContainer"></div>
-<div class="loading hidden" id="loadingBox">
+<div id="statusBox" class="status"></div>
+<div id="loadingBox" class="loading">
 <div class="spinner"></div>
-<div id="loadingText">Processing...</div>
+<p id="loadingText">Memproses...</p>
 </div>
+
+<div class="instruction">Cara pakai: Gunakan tombol di tiap kartu halaman untuk menghapus atau memutar, lalu klik "Simpan & Unduh"</div>
 
 <div class="page-container" id="pagesGrid"></div>
 </div>
@@ -67,198 +71,216 @@ h1{color:#333;margin-bottom:20px;text-align:center}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
+// Setup PDF.js worker
 const pdfjsLib = window['pdfjs-dist/build/pdf'];
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+if(pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
 
 let originalBytes = null;
-let pageState = []; // [{rotation: number, imgData: string}]
+let pagesState = []; // Array of {pageNumber, rotation, blobUrl}
 
-function showStatus(msg, isError=false){
-  const container = document.getElementById('statusContainer');
-  container.innerHTML = `<div class="status ${isError ? 'error' : 'success'}">${msg}</div>`;
+function showStatus(msg, isError = false) {
+    const container = document.getElementById('statusBox');
+    container.className = 'status ' + (isError ? 'err' : 'ok');
+    container.textContent = msg;
 }
 
-function showLoading(show, text=''){
-  const box = document.getElementById('loadingBox');
-  const txt = document.getElementById('loadingText');
-  box.classList.toggle('hidden', !show);
-  txt.textContent = text || 'Processing...';
+function showLoading(show, text = '') {
+    const box = document.getElementById('loadingBox');
+    const txt = document.getElementById('loadingText');
+    box.style.display = show ? 'block' : 'none';
+    if(text) txt.textContent = text;
 }
 
-async function handleFile(input){
-  if(!input.files?.length)return;
-  const file = input.files[0];
-  if(!file.name.toLowerCase().endsWith('.pdf')){
-    showStatus('❌ File harus dalam format PDF!', true);return;
-  }
-  showStatus('⏳ Memuat dokumen...');
-  const reader = new FileReader();
-  reader.onload = async(e)=>{
-    try{
-      originalBytes = new Uint8Array(e.target.result);
-      const pdfDoc = await pdfjsLib.getDocument({data: originalBytes}).promise;
-      
-      pageState = [];
-      showLoading(true, `Rendering ${pdfDoc.numPages} halaman...`);
-      
-      for(let i=1;i<=pdfDoc.numPages;i++){
-        const page = await pdfDoc.getPage(i);
-        const viewport = page.getViewport({scale: 0.7});
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = Math.floor(viewport.width);
-        canvas.height = Math.floor(viewport.height);
-        
-        await page.render({canvasContext: context, viewport}).promise;
-        
-        pageState.push({
-          pageNumber: i,
-          rotation: 0,
-          imgData: canvas.toDataURL('image/jpeg', 0.8)
-        });
-      }
-      
-      document.getElementById('uploadSection').classList.add('hidden');
-      document.getElementById('editorSection').classList.remove('hidden');
-      document.getElementById('fileInfo').textContent = `📄 ${file.name} (${pageState.length} halaman)`;
-      
-      renderGrid();
-      showStatus(`✅ Berhasil memuat ${pageState.length} halaman!`, false);
-    }catch(err){
-      console.error(err);
-      showStatus('❌ Error: '+err.message, true);
-    }finally{
-      showLoading(false);
+async function handleFile(input) {
+    if(!input.files || !input.files.length) return;
+    
+    const file = input.files[0];
+    if(file.name.toLowerCase().indexOf('.pdf') === -1) {
+        showStatus('❌ File harus berformat PDF!', true);
+        return;
     }
-  };
-  reader.readAsArrayBuffer(file);
+    
+    showStatus('⏳ Memuat dokumen...');
+    showLoading(true, 'Membaca file PDF...');
+    
+    try {
+        originalBytes = new Uint8Array(await file.arrayBuffer());
+        const pdfDoc = await pdfjsLib.getDocument({data: originalBytes}).promise;
+        
+        pagesState = [];
+        showLoading(true, `Rendering ${pdfDoc.numPages} halaman...`);
+        
+        for(let i = 1; i <= pdfDoc.numPages; i++) {
+            const page = await pdfDoc.getPage(i);
+            const viewport = page.getViewport({scale: 0.7});
+            
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = Math.floor(viewport.width);
+            canvas.height = Math.floor(viewport.height);
+            
+            await page.render({canvasContext: context, viewport}).promise;
+            
+            // Convert to blob for efficient reuse
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.8));
+            const blobUrl = URL.createObjectURL(blob);
+            
+            pagesState.push({
+                pageNumber: i,
+                rotation: 0,
+                blobUrl: blobUrl
+            });
+        }
+        
+        document.getElementById('uploadSection').classList.add('hidden');
+        document.getElementById('editorSection').classList.remove('hidden');
+        document.getElementById('fileInfo').textContent = `📄 ${file.name} (${pagesState.length} halaman)`;
+        
+        renderGrid();
+        showStatus(`✅ Berhasil memuat ${pagesState.length} halaman!`, false);
+    } catch(err) {
+        console.error(err);
+        showStatus('❌ Error: ' + err.message, true);
+    } finally {
+        showLoading(false);
+    }
 }
 
-function renderGrid(){
-  const grid = document.getElementById('pagesGrid');
-  grid.innerHTML = '';
-  
-  pageState.forEach((state,index)=>{
-    const item = document.createElement('div');
-    item.className = 'page-item';
+function renderGrid() {
+    const grid = document.getElementById('pagesGrid');
+    grid.innerHTML = '';
     
-    const thumbDiv = document.createElement('div');
-    thumbDiv.className = 'thumb-wrap';
-    
-    const img = document.createElement('img');
-    img.src = state.imgData;
-    img.className = 'thumb';
-    img.style.transform = getRotationStyle(state.rotation);
-    
-    thumbDiv.appendChild(img);
-    
-    const pageNum = document.createElement('div');
-    pageNum.className = 'pagenum';
-    pageNum.textContent = `Halaman ${index+1}`;
-    
-    const actionsDiv = document.createElement('div');
-    actionsDiv.className = 'actions';
-    
-    const delBtn = document.createElement('button');
-    delBtn.className = 'del';
-    delBtn.textContent = '🗑 Hapus';
-    delBtn.onclick = ()=>deletePage(index);
-    
-    const rotLBtn = document.createElement('button');
-    rotLBtn.className = 'rot';
-    rotLBtn.textContent = '↺ Kiri';
-    rotLBtn.onclick = ()=>rotatePage(index, -90);
-    
-    const rotRBtn = document.createElement('button');
-    rotRBtn.className = 'rot';
-    rotRBtn.textContent = 'Kanan ↻';
-    rotRBtn.onclick = ()=>rotatePage(index, 90);
-    
-    actionsDiv.append(delBtn, rotLBtn, rotRBtn);
-    item.append(thumbDiv, pageNum, actionsDiv);
-    grid.appendChild(item);
-  });
+    pagesState.forEach((state, index) => {
+        const item = document.createElement('div');
+        item.className = 'page-item';
+        
+        const thumbDiv = document.createElement('div');
+        thumbDiv.className = 'thumb-wrap';
+        
+        const img = document.createElement('img');
+        img.src = state.blobUrl;
+        img.style.transform = getRotationStyle(state.rotation);
+        img.style.transition = 'transform 0.2s';
+        
+        thumbDiv.appendChild(img);
+        
+        const pageNum = document.createElement('div');
+        pageNum.className = 'pagenum';
+        pageNum.textContent = `Halaman ${index+1}`;
+        
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'actions';
+        
+        const delBtn = document.createElement('button');
+        delBtn.className = 'del-btn';
+        delBtn.textContent = '🗑 Hapus';
+        delBtn.onclick = () => deletePage(index);
+        
+        const rotLBtn = document.createElement('button');
+        rotLBtn.className = 'rot-btn';
+        rotLBtn.textContent = '↺ Kiri';
+        rotLBtn.onclick = () => rotatePage(index, -90);
+        
+        const rotRBtn = document.createElement('button');
+        rotRBtn.className = 'rot-btn';
+        rotRBtn.textContent = 'Kanan ↻';
+        rotRBtn.onclick = () => rotatePage(index, 90);
+        
+        actionsDiv.append(delBtn, rotLBtn, rotRBtn);
+        item.append(thumbDiv, pageNum, actionsDiv);
+        grid.appendChild(item);
+    });
 }
 
-function getRotationStyle(deg){
-  while(deg<0)deg+=360;
-  deg%=360;
-  return deg===90?'rotate(90deg)':deg===180?'rotate(180deg)':deg===270||deg===-90?'rotate(-90deg)':'none';
+function getRotationStyle(deg) {
+    while(deg < 0) deg += 360;
+    deg %= 360;
+    if(deg === 0) return 'none';
+    if(deg === 90) return 'rotate(90deg)';
+    if(deg === 180) return 'rotate(180deg)';
+    if(deg === 270) return 'rotate(-90deg)';
+    return 'none';
 }
 
-function rotatePage(index,delta){
-  pageState[index].rotation = (pageState[index].rotation+delta)%360;
-  while(pageState[index].rotation<0)pageState[index].rotation+=360;
-  renderGrid();
-  showStatus(`✅ Rotasi diterapkan pada halaman ${index+1}`);
-}
-
-function deletePage(index){
-  if(confirm(`Hapus halaman ${index+1}?`)){
-    pageState.splice(index,1);
+function rotatePage(index, delta) {
+    pagesState[index].rotation = (pagesState[index].rotation + delta) % 360;
+    if(pagesState[index].rotation < 0) pagesState[index].rotation += 360;
     renderGrid();
-    showStatus('🗑 Halaman berhasil dihapus');
-  }
+    showStatus(`✅ Rotasi diterapkan pada halaman ${index+1}`, false);
 }
 
-function resetAll(){
-  location.reload();
+function deletePage(index) {
+    if(confirm(`Hapus halaman ${index+1}?`)) {
+        URL.revokeObjectURL(pagesState[index].blobUrl);
+        pagesState.splice(index, 1);
+        renderGrid();
+        showStatus('🗑 Halaman berhasil dihapus', false);
+    }
 }
 
-async function downloadPDF(){
-  if(pageState.length===0){
-    showStatus('❌ Tidak ada halaman untuk disimpan!', true);return;
-  }
-  
-  showLoading(true, 'Membuat PDF hasil editan...');
-  
-  try{
-    const {PDFDocument} = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js');
-    const pdfDoc = await PDFDocument.create();
-    
-    for(const state of pageState){
-      const dataUrl = state.imgData;
-      const base64 = dataUrl.split(',')[1];
-      const binary = atob(base64);
-      const arr = new Uint8Array(binary.length);
-      for(let i=0;i<binary.length;i++)arr[i]=binary.charCodeAt(i);
-      
-      const image = await pdfDoc.embedJpg(arr);
-      let width=image.width,height=image.height;
-      
-      if(state.rotation===90||state.rotation===270){
-        [width,height]=[height,width];
-      }
-      
-      const page = pdfDoc.addPage([width,height]);
-      const {Width,height:H} = page.getDimensions();
-      
-      page.drawImage(image,{
-        x: state.rotation===0? Width-image.width : 
-           state.rotation===90? Width-H:image.rotation===180?Width-image.width:Width-image.height,
-        y: state.rotation===0? H-image.height :
-           state.rotation===90? H-width:state.rotation===180?H-image.height:H-image.height,
-        width: state.rotation===90||state.rotation===270? image.height:image.width,
-        height: state.rotation===90||state.rotation===270? image.width:image.height,
-      });
+function resetAll() {
+    pagesState.forEach(page => URL.revokeObjectURL(page.blobUrl));
+    location.reload();
+}
+
+async function downloadPDF() {
+    if(pagesState.length === 0) {
+        showStatus('❌ Tidak ada halaman untuk disimpan!', true);
+        return;
     }
     
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes],{type:'application/pdf'});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'edited-document.pdf';
-    link.click();
-    URL.revokeObjectURL(url);
+    showLoading(true, 'Sedang membuat PDF hasil editan...');
     
-    showStatus('✅ PDF berhasil diunduh!', false);
-  }catch(err){
-    console.error(err);
-    showStatus('❌ Error saat membuat PDF: '+err.message, true);
-  }finally{
-    showLoading(false);
-  }
+    try {
+        const {PDFDocument} = window.pdfLib;
+        const pdfDoc = await PDFDocument.create();
+        
+        for(const state of pagesState) {
+            const response = await fetch(state.blobUrl);
+            const arrayBuffer = await response.arrayBuffer();
+            
+            const image = await pdfDoc.embedJpg(arrayBuffer);
+            let width = image.width;
+            let height = image.height;
+            
+            // Swap dimensions based on rotation
+            if(state.rotation === 90 || state.rotation === 270) {
+                [width, height] = [height, width];
+            }
+            
+            const page = pdfDoc.addPage([width, height]);
+            const {Width: w, Height: h} = page.getDimensions();
+            
+            // Center the image on the page
+            const x = (w - (state.rotation === 90 || state.rotation === 270 ? height : width)) / 2;
+            const y = (h - (state.rotation === 90 || state.rotation === 270 ? width : height)) / 2;
+            
+            page.drawImage(image, {
+                x: x,
+                y: y,
+                width: state.rotation === 90 || state.rotation === 270 ? height : width,
+                height: state.rotation === 90 || state.rotation === 270 ? width : height,
+            });
+        }
+        
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], {type: 'application/pdf'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'edited-document.pdf';
+        link.click();
+        URL.revokeObjectURL(url);
+        
+        showStatus('✅ PDF berhasil diunduh!', false);
+    } catch(err) {
+        console.error(err);
+        showStatus('❌ Error saat membuat PDF: ' + err.message, true);
+    } finally {
+        showLoading(false);
+    }
 }
 </script>
 </body>
