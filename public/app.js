@@ -69,6 +69,8 @@ const translations = {
         heroStatFree: "Gratis Selamanya",
         heroStatPrivate: "File Dikirim ke Server",
         heroStatTools: "Tool dalam Satu Web",
+        btnTipsMore: "📖 Lihat Panduan Lengkap",
+        btnTipsLess: "🔼 Tutup Panduan",
         dropCompressTitle: "Tarik atau Pilih File yang Mau Dikompres",
         dropCompressSub: "Bisa foto (PNG, JPG, WEBP) maupun dokumen PDF sekaligus",
         btnChooseFile: "Pilih File Kamu",
@@ -177,6 +179,8 @@ const translations = {
         heroStatFree: "Free Forever",
         heroStatPrivate: "Files Sent to Server",
         heroStatTools: "Tools in One Site",
+        btnTipsMore: "📖 View Full Guide",
+        btnTipsLess: "🔼 Close Guide",
         dropCompressTitle: "Select or Drag & Drop Files to Compress",
         dropCompressSub: "Supports Images (PNG, JPG, WEBP) & Multi-page PDF Documents",
         btnChooseFile: "Choose Files",
@@ -294,6 +298,14 @@ function setLanguage(lang) {
 }
 
 // Tab Switching
+function toggleTips() {
+    const c = document.getElementById('tipsCollapse');
+    const b = document.getElementById('tipsToggle');
+    if (!c || !b) return;
+    const open = c.classList.toggle('open');
+    const dict = translations[currentLang] || translations.id;
+    b.innerHTML = open ? (dict.btnTipsLess || '🔼 Tutup Panduan') : (dict.btnTipsMore || '📖 Lihat Panduan Lengkap');
+}
 function switchToolTab(tabId) {
     document.querySelectorAll('.tab-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.tab === tabId);
