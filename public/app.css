@@ -233,6 +233,22 @@ main {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
+.tab-badge-new {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+}
+
+.tab-btn.active .tab-badge-new {
+    background: #ffffff;
+    color: var(--primary);
+}
+
 .main-card {
     background: #ffffff;
     border-radius: var(--radius-lg);
