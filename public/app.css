@@ -1025,3 +1025,219 @@ footer {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
+
+/* ============================================================
+   VIBRANT LIGHT — "terang tapi lebih hidup"
+   Hero megah + blob animasi, glassmorphism, micro-interactions.
+   ============================================================ */
+
+/* ---------- LATAR HALAMAN ---------- */
+body {
+    background:
+        radial-gradient(900px 480px at 8% -4%, rgba(37, 99, 235, 0.09), transparent 60%),
+        radial-gradient(820px 480px at 96% 2%, rgba(168, 85, 247, 0.09), transparent 60%),
+        radial-gradient(760px 520px at 50% 112%, rgba(16, 185, 129, 0.07), transparent 60%),
+        #f7fafd;
+    background-attachment: fixed;
+}
+
+/* ---------- HEADER KACA ---------- */
+header {
+    background: rgba(255, 255, 255, 0.72) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    backdrop-filter: blur(18px) saturate(1.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 24px -12px rgba(37, 99, 235, 0.12);
+}
+
+/* ---------- HERO MEGAH ---------- */
+.hero { padding: 4rem 1rem 3rem; }
+
+@keyframes blobFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(36px, -26px) scale(1.1); }
+}
+.hero::before {
+    inset: -60px;
+    background:
+        radial-gradient(440px 270px at 12% 10%, rgba(37, 99, 235, 0.22), transparent 70%),
+        radial-gradient(480px 290px at 88% 14%, rgba(168, 85, 247, 0.20), transparent 70%),
+        radial-gradient(560px 320px at 50% 118%, rgba(56, 189, 248, 0.18), transparent 70%),
+        radial-gradient(300px 200px at 72% 62%, rgba(251, 191, 36, 0.12), transparent 70%);
+    animation: blobFloat 11s ease-in-out infinite;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: -60px;
+    background: radial-gradient(340px 220px at 28% 78%, rgba(16, 185, 129, 0.12), transparent 70%);
+    animation: blobFloat 14s ease-in-out infinite reverse;
+    pointer-events: none;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hero-pill { animation: fadeUp 0.7s ease both; }
+.hero h1 { animation: fadeUp 0.7s 0.1s ease both; }
+.hero > p { animation: fadeUp 0.7s 0.2s ease both; }
+.hero-cta { animation: fadeUp 0.7s 0.3s ease both; }
+.hero-stats { animation: fadeUp 0.7s 0.4s ease both; }
+
+.hero-pill {
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(120deg, #2563eb, #a855f7) border-box;
+    border: 1.5px solid transparent;
+    box-shadow: var(--shadow-md);
+    padding: 8px 18px;
+}
+
+.hero h1 {
+    font-size: clamp(2.2rem, 7vw, 3.5rem);
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+}
+@keyframes gradientShift { to { background-position: 220% center; } }
+.hero h1 span {
+    background: linear-gradient(120deg, #2563eb, #7c3aed, #06b6d4, #2563eb);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 7s linear infinite;
+}
+
+/* kilau tombol */
+.btn-hero-main, .btn-upload, .btn-primary-action { position: relative; overflow: hidden; }
+.btn-hero-main::after, .btn-upload::after, .btn-primary-action::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -80%;
+    width: 45%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.65s ease;
+    pointer-events: none;
+}
+.btn-hero-main:hover::after, .btn-upload:hover::after, .btn-primary-action:hover::after { left: 135%; }
+
+/* stat jadi chip kaca */
+.hero-stat {
+    background: rgba(255, 255, 255, 0.66);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-sm);
+    border-radius: 16px;
+    padding: 0.75rem 1.3rem;
+    min-width: 128px;
+    transition: transform 0.2s ease;
+}
+.hero-stat:hover { transform: translateY(-3px); }
+
+/* ---------- KARTU KACA + AKSEN GRADIEN ---------- */
+.main-card {
+    background: rgba(255, 255, 255, 0.74);
+    -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    backdrop-filter: blur(22px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 24px 48px -14px rgba(37, 99, 235, 0.16), var(--shadow-md);
+}
+.main-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed, #06b6d4, #10b981);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* ---------- TAB NAV KACA ---------- */
+.tab-nav {
+    background: rgba(255, 255, 255, 0.62);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 18px;
+    padding: 6px;
+    box-shadow: var(--shadow-sm);
+    -webkit-mask-image: none;
+    mask-image: none;
+    gap: 4px;
+}
+.tab-btn {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 13px;
+}
+.tab-btn:hover { background: rgba(37, 99, 235, 0.09); transform: none; }
+.tab-btn.active {
+    background: var(--primary-gradient);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.38);
+    transform: translateY(-1px);
+}
+
+/* ---------- KARTU FITUR HIDUP ---------- */
+.feature-card {
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+.feature-card:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 18px 36px -12px rgba(37, 99, 235, 0.22);
+}
+.feature-icon {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    box-shadow: 0 10px 20px -6px rgba(37, 99, 235, 0.5);
+    width: 56px; height: 56px;
+    font-size: 1.6rem;
+    border-radius: 16px;
+}
+.feature-card:nth-child(2) .feature-icon {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    box-shadow: 0 10px 20px -6px rgba(124, 58, 237, 0.5);
+}
+.feature-card:nth-child(3) .feature-icon {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    box-shadow: 0 10px 20px -6px rgba(245, 158, 11, 0.5);
+}
+.feature-card:nth-child(4) .feature-icon {
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    box-shadow: 0 10px 20px -6px rgba(16, 185, 129, 0.5);
+}
+
+/* ---------- DROPZONE BERDENYUT ---------- */
+@keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+.dropzone {
+    border: 2.5px dashed #93c5fd;
+    background: linear-gradient(180deg, rgba(239, 246, 255, 0.85), rgba(255, 255, 255, 0.35));
+}
+.drop-icon-wrapper {
+    animation: floatY 3.2s ease-in-out infinite;
+    background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+}
+
+/* ---------- TOMBOL TIPS GRADIEN ---------- */
+.btn-tips-toggle {
+    background: var(--primary-gradient);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.32);
+    padding: 0.8rem 2rem;
+    border-radius: 14px;
+}
+.btn-tips-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(37, 99, 235, 0.42);
+    border-color: transparent;
+    color: #ffffff;
+}
+
+@media (max-width: 640px) {
+    .hero { padding: 3rem 1rem 2.2rem; }
+    .hero-stat { min-width: 0; padding: 0.6rem 0.9rem; }
+}
