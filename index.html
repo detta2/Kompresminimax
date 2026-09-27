@@ -230,6 +230,9 @@
                 <button class="tab-btn" data-tab="pdfconvert" data-i18n="tabPdfConvert" onclick="switchToolTab('pdfconvert')">
                     📑 Konversi PDF
                 </button>
+                <button class="tab-btn" data-tab="bgchange" data-i18n="tabBgChange" onclick="switchToolTab('bgchange')">
+                    🎨 Ganti Background
+                </button>
             </div>
 
             <!-- TAB 1: COMPRESS -->
@@ -668,6 +671,68 @@
                     </div>
                 </div>
             </div>
+
+            <!-- TAB 8: GANTI BACKGROUND PAS FOTO -->
+            <div class="main-card tool-view hidden" id="viewBgChange">
+                <div class="dropzone" id="dropZoneBgChange">
+                    <div class="drop-icon-wrapper">🎨</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropBgTitle">Pilih Foto yang Mau Diganti Background-nya</h3>
+                    <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropBgSub">
+                        AI akan memisahkan orang dari background lama, lalu menggantinya dengan warna pilihanmu. 100% di browser, tanpa upload.
+                    </p>
+                    <input type="file" id="fileInputBgChange" accept="image/*" style="display: none;">
+                    <button class="btn-upload" data-i18n="btnChoosePhoto" onclick="document.getElementById('fileInputBgChange').click()">Pilih Foto Kamu</button>
+                </div>
+
+                <div id="bgChangeWorkspace" class="hidden" style="margin-top: 1.5rem;">
+                    <!-- Pilihan warna background -->
+                    <div style="margin-bottom: 1rem;">
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; display: block;" data-i18n="labelBgColor">
+                            🎯 Pilih Warna Background Baru:
+                        </label>
+                        <div class="preset-buttons" id="bgColorChoices">
+                            <button class="preset-btn bg-choice active" data-color="#ff0000" data-i18n="bgRed">🟥 Merah (CPNS)</button>
+                            <button class="preset-btn bg-choice" data-color="#0000ff" data-i18n="bgBlue">🟦 Biru</button>
+                            <button class="preset-btn bg-choice" data-color="#ffffff" data-i18n="bgWhite">⬜ Putih</button>
+                            <label class="preset-btn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+                                🎨 <span data-i18n="bgCustom">Warna lain:</span>
+                                <input type="color" id="bgCustomColor" value="#00a86b" style="width:36px; height:28px; border:none; background:none; cursor:pointer; padding:0;">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Preview sebelum/sesudah -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:1rem;">
+                        <div style="background:#f8fafc; border:1.5px solid var(--gray-200); border-radius:12px; padding:10px; text-align:center;">
+                            <div style="font-size:0.8rem; font-weight:700; color:var(--gray-500); margin-bottom:6px;" data-i18n="labelBefore">SEBELUM</div>
+                            <img id="bgPreviewBefore" alt="Foto asli" style="max-width:100%; max-height:320px; border-radius:8px;">
+                        </div>
+                        <div style="background:#f8fafc; border:1.5px solid var(--gray-200); border-radius:12px; padding:10px; text-align:center;">
+                            <div style="font-size:0.8rem; font-weight:700; color:var(--gray-500); margin-bottom:6px;" data-i18n="labelAfter">SESUDAH</div>
+                            <div id="bgPreviewAfterWrap" style="min-height:120px; display:flex; align-items:center; justify-content:center;">
+                                <img id="bgPreviewAfter" alt="Hasil ganti background" class="hidden" style="max-width:100%; max-height:320px; border-radius:8px;">
+                                <span id="bgAfterPlaceholder" style="font-size:0.85rem; color:var(--gray-400);" data-i18n="bgAfterPlaceholder">Hasil akan muncul di sini</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="convert-status-bar hidden" id="bgStatusBar">
+                        <div class="convert-progress-fill" id="bgProgressFill" style="width:0%"></div>
+                    </div>
+                    <p id="bgStatusText" class="hidden" style="font-size:0.85rem; color:var(--primary); margin-top:8px; font-weight:600;"></p>
+                    <p style="font-size:0.78rem; color:var(--gray-400); margin-top:6px;" data-i18n="bgFirstRunNote">
+                        Catatan: saat pertama kali dipakai, browser mengunduh model AI (~40 MB, sekali saja, tersimpan otomatis).
+                    </p>
+
+                    <!-- Tombol aksi -->
+                    <div style="margin-top:1rem; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                        <button class="btn-primary-action" id="btnProcessBg" style="font-size:1rem; padding:0.85rem 1.6rem;" data-i18n="btnProcessBg">⚡ Ganti Background Sekarang</button>
+                        <button class="btn-sm" style="background:#f1f5f9; color:var(--gray-700); border:1px solid #cbd5e1;" onclick="resetBgChange()" data-i18n="btnChangePhoto">📂 Ganti Foto</button>
+                        <a id="btnDownloadBg" class="btn-primary-action hidden" style="background:#10b981; text-decoration:none; padding:0.85rem 1.6rem;" download="pasfoto-background-baru.jpg" data-i18n="btnDownloadBg">⬇️ Unduh Hasil</a>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Highlights & Info -->
@@ -819,5 +884,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="app.js"></script>
+    <script type="module" src="bgchange.js"></script>
 </body>
 </html>
