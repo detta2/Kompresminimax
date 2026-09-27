@@ -1,5 +1,5 @@
 // Service Worker for KompresMiniMax - Offline PWA Support
-const CACHE_NAME = 'kompresminimax-v1.2.0';
+const CACHE_NAME = 'kompresminimax-v1.3.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -45,6 +45,29 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
+  // Navigasi halaman HTML: network-first supaya konten selalu fresh,
+  // fallback ke cache hanya saat offline.
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cached) => {
+            return cached || caches.match('/index.html');
+          });
+        })
+    );
+    return;
+  }
 
   const url = new URL(event.request.url);
 
