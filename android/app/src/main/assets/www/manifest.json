@@ -1,0 +1,17 @@
+{
+  "name": "KompresMiniMax - Kompres PDF & Foto Online",
+  "short_name": "KompresMiniMax",
+  "description": "Kompres file PDF & foto ke target ukuran KB/MB CPNS, resize pas foto 3x4 4x6, gabung dokumen PDF 100% aman.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "64x64 128x128 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

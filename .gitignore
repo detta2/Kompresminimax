@@ -15,3 +15,11 @@ dist/
 build/
 .vercel
 .env*
+
+# Android (KompresMiniMax native wrapper)
+android/keystore/
+android/key.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
