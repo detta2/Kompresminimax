@@ -43,3 +43,12 @@ for (const file of files) {
 }
 
 console.log('Build completed successfully: All files prepared in public/');
+
+// Halaman fisik per rute SEO (clean URL): /kompres-pdf -> kompres-pdf.html (isi = SPA index.html,
+// tab aktif dipilih dari URL oleh app.js). Menjamin rute tidak 404 di Vercel.
+const seoRoutes = ['kompres-pdf', 'ganti-background-foto', 'resize-pas-foto', 'gabung-pdf',
+  'pisah-pdf', 'susun-pdf', 'scan-dokumen', 'konversi-pdf'];
+for (const route of seoRoutes) {
+  fs.copyFileSync(path.join(publicDir, 'index.html'), path.join(publicDir, route + '.html'));
+  console.log(`SEO route page: public/${route}.html`);
+}

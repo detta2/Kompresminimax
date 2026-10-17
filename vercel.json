@@ -5,14 +5,14 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/kompres-pdf", "destination": "/index.html" },
-    { "source": "/ganti-background-foto", "destination": "/index.html" },
-    { "source": "/resize-pas-foto", "destination": "/index.html" },
-    { "source": "/gabung-pdf", "destination": "/index.html" },
-    { "source": "/pisah-pdf", "destination": "/index.html" },
-    { "source": "/susun-pdf", "destination": "/index.html" },
-    { "source": "/scan-dokumen", "destination": "/index.html" },
-    { "source": "/konversi-pdf", "destination": "/index.html" }
+    { "source": "/kompres-pdf", "destination": "/" },
+    { "source": "/ganti-background-foto", "destination": "/" },
+    { "source": "/resize-pas-foto", "destination": "/" },
+    { "source": "/gabung-pdf", "destination": "/" },
+    { "source": "/pisah-pdf", "destination": "/" },
+    { "source": "/susun-pdf", "destination": "/" },
+    { "source": "/scan-dokumen", "destination": "/" },
+    { "source": "/konversi-pdf", "destination": "/" }
   ],
   "headers": [
     {
