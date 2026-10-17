@@ -135,7 +135,7 @@
           "name": "Berapa ukuran piksel pas foto standar 2x3, 3x4, dan 4x6 untuk cetak dan unggah online?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pada standar resolusi cetak 300 DPI: Pas foto 2x3 cm adalah 236 x 354 px, pas foto 3x4 cm adalah 354 x 472 px, dan pas foto 4x6 cm adalah 472 x 709 px. Anda cukup memilih preset ukuran instan di menu 'Edit Size Foto' tanpa perlu menghitung rasio secara manual."
+            "text": "Pada standar resolusi cetak 300 DPI: Pas foto 2x3 cm adalah 236 x 354 px, pas foto 3x4 cm adalah 354 x 472 px, dan pas foto 4x6 cm adalah 472 x 709 px. Anda cukup memilih preset ukuran instan di menu 'Ubah Ukuran Foto' tanpa perlu menghitung rasio secara manual."
           }
         },
         {
@@ -174,13 +174,10 @@
                 <span class="brand-text">Kompres<span class="brand-highlight">MiniMax</span></span>
             </a>
 
-            <!-- Header Controls: Realtime Clock, Language Selector & Privacy Badge -->
+            <!-- Header Controls: Install App, Language Selector & Privacy Badge -->
             <div class="nav-tools">
-                <!-- Live Clock -->
-                <div class="nav-clock-box">
-                    <span class="clock-live-dot"></span>
-                    <span id="headerClockDisplay">--:--:--</span>
-                </div>
+                <!-- PWA Install -->
+                <button id="btnInstallApp" class="btn-install-app" data-i18n="btnInstallApp">📲 Install Aplikasi</button>
 
                 <!-- 2 Language Options: ID / EN -->
                 <div class="lang-selector-group">
@@ -425,6 +422,7 @@
                         <div style="display: flex; gap: 8px;">
                             <button class="btn-sm btn-del" data-i18n="btnChangePhoto" onclick="cancelResize()">Ganti Foto Lain</button>
                             <button class="btn-primary-action" data-i18n="btnSavePhoto" onclick="downloadResizedPhoto()">⬇️ Simpan & Unduh Foto</button>
+                            <button class="btn-primary-action" style="background:#f59e0b;" onclick="sendResizeToCompress()" data-i18n="btnChainCompress">➡️ Lanjut Kompres &lt;200KB</button>
                         </div>
                     </div>
                 </div>
@@ -571,7 +569,7 @@
                     <div class="drop-icon-wrapper">🔄</div>
                     <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark);" data-i18n="dropPdfConvertTitle">Pilih Dokumen PDF untuk Dikonversi</h3>
                     <p style="color: var(--gray-500); font-size: 0.9rem; margin-top: 4px;" data-i18n="dropPdfConvertSub">
-                        Konversi PDF ke PowerPoint (.pptx), Word (.docx/.doc), Excel (.xlsx), Teks (.txt), Gambar (.zip), atau Web (.html) 100% lokal di browser tanpa upload ke server.
+                        Konversi PDF ke PowerPoint (.pptx), Word (.docx), Excel (.xlsx), Teks (.txt), Gambar (.zip), atau Web (.html) 100% lokal di browser tanpa upload ke server.
                     </p>
                     <input type="file" id="fileInputPdfConvert" accept=".pdf,application/pdf" style="display: none;">
                     <button class="btn-upload" data-i18n="btnChoosePdfSource" onclick="document.getElementById('fileInputPdfConvert').click()">Pilih File PDF Kamu</button>
@@ -657,7 +655,7 @@
 
                         <!-- Tombol Eksekusi Konversi -->
                         <div style="margin-top:1.2rem; display:flex; justify-content:flex-end; gap:10px; align-items:center;">
-                            <span id="selectedFormatHint" style="font-size:0.85rem; color:var(--gray-500); font-weight:600;">Format terpilih: Microsoft Word (.doc)</span>
+                            <span id="selectedFormatHint" style="font-size:0.85rem; color:var(--gray-500); font-weight:600;">Format terpilih: Microsoft Word (.docx)</span>
                             <button class="btn-primary-action" id="btnExecuteConvert" style="font-size:1rem; padding:0.85rem 1.6rem;" onclick="executePdfConversion()">⚡ Mulai Konversi Sekarang</button>
                         </div>
 
@@ -701,6 +699,8 @@
                         </label>
                         <div class="preset-buttons" id="bgColorChoices">
                             <button class="preset-btn bg-choice active" data-color="#ff0000" data-i18n="bgRed">🟥 Merah (CPNS)</button>
+                            <button class="preset-btn bg-choice" data-color="#cc0000">🟥 Merah BKN (#CC0000)</button>
+                            <button class="preset-btn bg-choice" data-color="#0066cc">🟦 Biru BKN (#0066CC)</button>
                             <button class="preset-btn bg-choice" data-color="#0000ff" data-i18n="bgBlue">🟦 Biru</button>
                             <button class="preset-btn bg-choice" data-color="#ffffff" data-i18n="bgWhite">⬜ Putih</button>
                             <label class="preset-btn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
@@ -739,10 +739,14 @@
                         <button class="btn-primary-action" id="btnProcessBg" style="font-size:1rem; padding:0.85rem 1.6rem;" data-i18n="btnProcessBg">⚡ Ganti Background Sekarang</button>
                         <button class="btn-sm" style="background:#f1f5f9; color:var(--gray-700); border:1px solid #cbd5e1;" onclick="resetBgChange()" data-i18n="btnChangePhoto">📂 Ganti Foto</button>
                         <a id="btnDownloadBg" class="btn-primary-action hidden" style="background:#10b981; text-decoration:none; padding:0.85rem 1.6rem;" download="pasfoto-background-baru.jpg" data-i18n="btnDownloadBg">⬇️ Unduh Hasil</a>
+                        <button id="btnChainBgToResize" class="btn-primary-action hidden" style="background:#f59e0b; font-size:1rem; padding:0.85rem 1.6rem;" onclick="sendBgToResize()" data-i18n="btnChainBg">➡️ Lanjut Potong 3x4 & Kompres</button>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Seksi Panduan per Halaman (di-render dinamis sesuai tab/URL aktif) -->
+        <section id="pageGuide" style="max-width:1100px; margin:0 auto; padding:0 1rem;"></section>
 
         <!-- Highlights & Info -->
         <section class="features-grid">
@@ -857,7 +861,7 @@
                     <p style="color: var(--gray-500); font-size: 0.9rem;" data-i18n="tipsA5">A: Gampang! Pilih menu 'Kompres File', ketik target '200 KB', terus upload PDF kamu. Sistemnya otomatis nyeimbangin kualitas teks dan gambar supaya ukurannya pas di bawah 200 KB tapi tulisannya tetap tajam.</p>
 
                     <h4 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin-top: 0.8rem;" data-i18n="tipsQ6">Q: Ukuran piksel pas foto 2x3, 3x4, 4x6 yang bener berapa?</h4>
-                    <p style="color: var(--gray-500); font-size: 0.9rem;" data-i18n="tipsA6">A: Dengan standar cetak 300 DPI: 2x3 cm = 236 × 354 px, 3x4 cm = 354 × 472 px, 4x6 cm = 472 × 709 px. Tinggal pilih preset-nya di menu 'Edit Size Foto', gak usah ngitung manual.</p>
+                    <p style="color: var(--gray-500); font-size: 0.9rem;" data-i18n="tipsA6">A: Dengan standar cetak 300 DPI: 2x3 cm = 236 × 354 px, 3x4 cm = 354 × 472 px, 4x6 cm = 472 × 709 px. Tinggal pilih preset-nya di menu 'Ubah Ukuran Foto', gak usah ngitung manual.</p>
                 </div>
                 </div><!-- /#tipsCollapse -->
                 <div style="text-align: center; margin-top: 0.5rem;">

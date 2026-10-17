@@ -43,6 +43,8 @@ function bgHandleFile(file) {
     $('bgPreviewAfter').classList.add('hidden');
     $('bgAfterPlaceholder').classList.remove('hidden');
     $('btnDownloadBg').classList.add('hidden');
+    $('btnChainBgToResize')?.classList.add('hidden');
+    BG.resultBlob = null;
     if (BG.resultURL) { URL.revokeObjectURL(BG.resultURL); BG.resultURL = null; }
     $('bgChangeWorkspace').classList.remove('hidden');
     $('dropZoneBgChange').style.display = 'none';
@@ -80,6 +82,7 @@ function bgComposite() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(fg, 0, 0);
     canvas.toBlob((blob) => {
+        BG.resultBlob = blob;
         if (BG.resultURL) URL.revokeObjectURL(BG.resultURL);
         BG.resultURL = URL.createObjectURL(blob);
         const img = $('bgPreviewAfter');
@@ -89,6 +92,7 @@ function bgComposite() {
         const dl = $('btnDownloadBg');
         dl.href = BG.resultURL;
         dl.classList.remove('hidden');
+        $('btnChainBgToResize')?.classList.remove('hidden');
         bgDone();
         bgLog('✅ Selesai! Klik "Unduh Hasil" untuk menyimpan.', 100);
         setTimeout(bgDone, 4000);
@@ -111,15 +115,22 @@ async function bgProcess() {
             );
         }
 
+        // Progress agregat seluruh file model: tampilkan MB terunduh / total MB
+        const fetchParts = {};
+        const toMB = (b) => (b / 1048576).toFixed(1);
         bgLog('🧠 Memisahkan orang dari background...', 15);
         const blob = await BG.lib.removeBackground(BG.file, {
             model: 'isnet_quint8', // model ringan (~40 MB), cukup akurat untuk pas foto
             progress: (key, current, total) => {
                 // key: 'fetch:...' (unduh model) atau 'compute:inference' (proses)
-                const pct = total > 0 ? Math.round((current / total) * 100) : 0;
                 if (key.startsWith('fetch:')) {
-                    bgLog(`⬇️ Mengunduh model AI... ${pct}%`, pct);
+                    fetchParts[key] = { current, total };
+                    let cur = 0, tot = 0;
+                    Object.values(fetchParts).forEach(p => { cur += p.current; tot += Math.max(p.total, p.current); });
+                    const pct = tot > 0 ? Math.round((cur / tot) * 100) : 0;
+                    bgLog(`⬇️ Mengunduh model AI... ${toMB(cur)} MB / ${toMB(tot)} MB (${pct}%)`, 5 + pct * 0.55);
                 } else {
+                    const pct = total > 0 ? Math.round((current / total) * 100) : 0;
                     bgLog(`🧠 Memproses gambar... ${pct}%`, 60 + pct * 0.35);
                 }
             },
@@ -146,11 +157,27 @@ async function bgProcess() {
     }
 }
 
+/* ---------- workflow chaining: hasil BG -> tab Ubah Ukuran Foto (preset 3x4) ---------- */
+async function sendBgToResize() {
+    let blob = BG.resultBlob;
+    if (!blob && BG.resultURL) {
+        try { blob = await (await fetch(BG.resultURL)).blob(); } catch (e) { /* abaikan */ }
+    }
+    if (!blob) { alert('Proses ganti background dulu sampai selesai.'); return; }
+    const file = new File([blob], 'pasfoto-background-baru.jpg', { type: 'image/jpeg' });
+    window._pendingResizePreset = 'pas3x4';
+    switchToolTab('resize');
+    handleResizeFileInput(file);
+    document.querySelector('.app-container')?.scrollIntoView({ behavior: 'smooth' });
+}
+window.sendBgToResize = sendBgToResize;
+
 /* ---------- reset ---------- */
 function resetBgChange() {
     if (BG.fileURL) URL.revokeObjectURL(BG.fileURL);
     if (BG.resultURL) URL.revokeObjectURL(BG.resultURL);
-    Object.assign(BG, { file: null, fileURL: null, resultURL: null, fgImage: null });
+    Object.assign(BG, { file: null, fileURL: null, resultURL: null, resultBlob: null, fgImage: null });
+    $('btnChainBgToResize')?.classList.add('hidden');
     const fi = $('fileInputBgChange');
     if (fi) fi.value = '';
     $('bgChangeWorkspace').classList.add('hidden');

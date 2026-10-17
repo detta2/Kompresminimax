@@ -84,6 +84,81 @@ header {
     flex-wrap: wrap;
 }
 
+.guide-block {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    margin: 1rem 0;
+    box-shadow: var(--shadow-sm);
+    text-align: left;
+}
+
+.guide-block h2 {
+    font-size: 1.12rem;
+    color: var(--dark);
+    margin: 0 0 0.55rem;
+}
+
+.guide-block p, .guide-block li {
+    color: var(--gray-600, #4b5563);
+    font-size: 0.93rem;
+    line-height: 1.55;
+}
+
+.guide-block ol { padding-left: 1.25rem; margin: 0.3rem 0; }
+
+.guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.guide-table th, .guide-table td {
+    border: 1px solid var(--gray-200);
+    padding: 7px 10px;
+    text-align: left;
+}
+
+.guide-table th { background: var(--gray-100); color: var(--dark); }
+
+.guide-link {
+    display: inline-block;
+    margin: 2px 4px 2px 0;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    color: var(--primary, #2563eb);
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.guide-link:hover { filter: brightness(0.97); }
+
+.btn-install-app {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--primary, #2563eb);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-install-app:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
 .nav-clock-box {
     display: flex;
     align-items: center;

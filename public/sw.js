@@ -1,5 +1,5 @@
 // Service Worker for KompresMiniMax - Offline PWA Support
-const CACHE_NAME = 'kompresminimax-v1.3.0';
+const CACHE_NAME = 'kompresminimax-v1.4.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   '/terms.html',
   '/app.css',
   '/app.js',
+  '/bgchange.js',
   '/logo.svg',
   '/og-image.svg',
   '/manifest.json',
@@ -70,6 +71,28 @@ self.addEventListener('fetch', (event) => {
   }
 
   const url = new URL(event.request.url);
+
+  // Model AI @imgly + aset CDN berversi tetap: CACHE-FIRST murni.
+  // File model besar (~40MB) dan immutable (versi ter-pin di URL), jadi
+  // kunjungan berikutnya langsung instan dari Cache Storage tanpa unduh ulang.
+  if (url.hostname === 'staticimgly.com' || url.hostname === 'cdn.jsdelivr.net' ||
+      url.hostname === 'unpkg.com' || url.hostname === 'cdnjs.cloudflare.com') {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((networkResponse) => {
+          if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
+        });
+      })
+    );
+    return;
+  }
 
   // Stale-while-revalidate / Cache-first strategy for static assets & CDNs
   event.respondWith(

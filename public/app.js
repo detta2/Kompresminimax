@@ -64,6 +64,9 @@ const translations = {
         btnProcessBg: "⚡ Ganti Background Sekarang",
         btnChangePhoto: "📂 Ganti Foto",
         btnDownloadBg: "⬇️ Unduh Hasil",
+        btnChainBg: "➡️ Lanjut Potong 3x4 & Kompres",
+        btnChainCompress: "➡️ Lanjut Kompres <200KB",
+        btnInstallApp: "📲 Install Aplikasi",
         heroCtaCompress: "🗜️ Mulai Kompres File",
         heroCtaBg: "🎨 Ganti Background Foto",
         heroStatFree: "Gratis Selamanya",
@@ -108,7 +111,7 @@ const translations = {
         tipsQ5: "Q: Gimana cara kompres PDF biar pas 200 KB tanpa buram?",
         tipsA5: "A: Gampang! Pilih menu 'Kompres File', ketik target '200 KB', terus upload PDF kamu. Sistemnya otomatis nyeimbangin kualitas teks dan gambar supaya ukurannya pas di bawah 200 KB tapi tulisannya tetap tajam.",
         tipsQ6: "Q: Ukuran piksel pas foto 2x3, 3x4, 4x6 yang bener berapa?",
-        tipsA6: "A: Dengan standar cetak 300 DPI: 2x3 cm = 236 × 354 px, 3x4 cm = 354 × 472 px, 4x6 cm = 472 × 709 px. Tinggal pilih preset-nya di menu 'Edit Size Foto', gak usah ngitung manual.",
+        tipsA6: "A: Dengan standar cetak 300 DPI: 2x3 cm = 236 × 354 px, 3x4 cm = 354 × 472 px, 4x6 cm = 472 × 709 px. Tinggal pilih preset-nya di menu 'Ubah Ukuran Foto', gak usah ngitung manual.",
         dropCompressTitle: "Tarik atau Pilih File yang Mau Dikompres",
         dropCompressSub: "Bisa foto (PNG, JPG, WEBP) maupun dokumen PDF sekaligus",
         btnChooseFile: "Pilih File Kamu",
@@ -212,6 +215,9 @@ const translations = {
         btnProcessBg: "⚡ Change Background Now",
         btnChangePhoto: "📂 Change Photo",
         btnDownloadBg: "⬇️ Download Result",
+        btnChainBg: "➡️ Continue: Crop 3x4 & Compress",
+        btnChainCompress: "➡️ Continue: Compress <200KB",
+        btnInstallApp: "📲 Install App",
         heroCtaCompress: "🗜️ Start Compressing",
         heroCtaBg: "🎨 Change Photo Background",
         heroStatFree: "Free Forever",
@@ -334,18 +340,40 @@ const translations = {
     }
 };
 
-// Clock Initialization
-function initLiveClock() {
-    function update() {
-        const d = new Date();
-        const hrs = String(d.getHours()).padStart(2, '0');
-        const mins = String(d.getMinutes()).padStart(2, '0');
-        const secs = String(d.getSeconds()).padStart(2, '0');
-        const clockEl = document.getElementById('headerClockDisplay');
-        if (clockEl) clockEl.textContent = `${hrs}:${mins}:${secs}`;
+// PWA Install Prompt (pengganti widget jam di header)
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const btn = document.getElementById('btnInstallApp');
+    if (btn) btn.classList.remove('hidden');
+});
+
+window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    const btn = document.getElementById('btnInstallApp');
+    if (btn) btn.classList.add('hidden');
+});
+
+function initInstallPrompt() {
+    const btn = document.getElementById('btnInstallApp');
+    if (!btn) return;
+    // Sudah terinstal sebagai aplikasi (mode standalone) -> tombol tidak perlu tampil
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        btn.classList.add('hidden');
+        return;
     }
-    update();
-    setInterval(update, 1000);
+    btn.addEventListener('click', async () => {
+        if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            btn.classList.add('hidden');
+        } else {
+            alert('Untuk menginstal: buka menu browser (⋮ atau Bagikan) lalu pilih "Tambahkan ke Layar Utama" / "Install aplikasi". Setelah terinstal, KompresMiniMax bisa dibuka offline dari layar utama HP kamu.');
+        }
+    });
 }
 
 // Language Selector
@@ -367,6 +395,8 @@ function setLanguage(lang) {
     if (heroTitle && dict.heroTitle) {
         heroTitle.innerHTML = dict.heroTitle;
     }
+    // H1 per halaman (blueprint SEO) menimpa teks hero generik bila bukan di beranda
+    if (window._currentTab) applyTabMeta(window._currentTab);
 
     // Sinkronkan label tombol tips dengan status buka/tutup
     const tipsC = document.getElementById('tipsCollapse');
@@ -390,7 +420,190 @@ function toggleTips() {
     const dict = translations[currentLang] || translations.id;
     b.innerHTML = open ? (dict.btnTipsLess || '🔼 Tutup Panduan') : (dict.btnTipsMore || '📖 Lihat Panduan Lengkap');
 }
-function switchToolTab(tabId) {
+// -------------------------------------------------------------
+// SEO ROUTING: setiap tab punya URL bersih + title/meta dinamis
+// -------------------------------------------------------------
+const TAB_ROUTES = {
+    compress: '/kompres-pdf',
+    bgchange: '/ganti-background-foto',
+    resize: '/resize-pas-foto',
+    merge: '/gabung-pdf',
+    split: '/pisah-pdf',
+    organize: '/susun-pdf',
+    scan: '/scan-dokumen',
+    pdfconvert: '/konversi-pdf'
+};
+
+const TAB_META = {
+    compress: {
+        title: 'Kompres PDF 200KB untuk CPNS Online Gratis | KompresMiniMax',
+        desc: 'Kompres PDF jadi pas 200KB untuk syarat SSCASN CPNS, PPPK & BUMN. Gratis tanpa daftar dan tanpa watermark — file diproses 100% di browser, tidak diupload ke server.',
+        h1: 'Kompres PDF 200KB Online Gratis untuk CPNS'
+    },
+    bgchange: {
+        title: 'Ganti Background Foto Merah Online Gratis | KompresMiniMax',
+        desc: 'Ganti background pas foto jadi merah (#FF0000 / #CC0000) atau biru pakai AI, langsung di browser. Gratis tanpa batas, tanpa daftar, tanpa watermark — foto tidak diupload ke server.',
+        h1: 'Ganti Background Foto Merah Online Gratis'
+    },
+    resize: {
+        title: 'Resize Pas Foto 3x4 & 4x6 Jadi 200KB Online | KompresMiniMax',
+        desc: 'Ubah ukuran pas foto 2x3, 3x4, 4x6 dan kompres pas di bawah 200KB untuk CPNS & lamaran kerja. Preset piksel 300 DPI, gratis tanpa aplikasi — file tetap di perangkatmu.',
+        h1: 'Resize Pas Foto 3x4 & 4x6 Jadi 200KB Online Gratis'
+    },
+    merge: {
+        title: 'Gabung PDF Online Gratis — Satukan File PDF | KompresMiniMax',
+        desc: 'Gabungkan banyak file PDF jadi satu dan atur urutannya dengan geser & letakkan. Gratis tanpa batas, tanpa watermark, diproses 100% di browser tanpa upload ke server.',
+        h1: 'Gabung PDF Online Gratis'
+    },
+    split: {
+        title: 'Pisah PDF Online Gratis — Ambil Halaman PDF | KompresMiniMax',
+        desc: 'Pisahkan halaman PDF: ambil rentang halaman tertentu (mis. 1–3, 5) menjadi file baru. Gratis, tanpa daftar, tanpa watermark — 100% diproses di browsermu.',
+        h1: 'Pisah PDF Online Gratis'
+    },
+    organize: {
+        title: 'Susun PDF Online Gratis — Urutkan & Putar Halaman | KompresMiniMax',
+        desc: 'Bereskan urutan halaman PDF: geser untuk mengurutkan, putar halaman miring, hapus lembar yang tidak perlu. Gratis tanpa watermark, semua diproses lokal di browser.',
+        h1: 'Susun Ulang Halaman PDF Online Gratis'
+    },
+    scan: {
+        title: 'Scan Dokumen Jadi PDF Online Gratis dari HP | KompresMiniMax',
+        desc: 'Scan dokumen pakai kamera HP atau laptop lalu ubah jadi PDF rapi. Gratis tanpa aplikasi tambahan, tanpa daftar — file hasil scan tidak dikirim ke server mana pun.',
+        h1: 'Scan Dokumen Jadi PDF Online Gratis'
+    },
+    pdfconvert: {
+        title: 'Konversi PDF Online Gratis — PDF ke Word & Excel | KompresMiniMax',
+        desc: 'Ubah PDF jadi DOCX, PPTX, XLSX, TXT, HTML, atau gambar — cepat dan gratis tanpa daftar. Konversi 100% lokal di browser, file tidak diupload ke server.',
+        h1: 'Konversi PDF Online Gratis'
+    }
+};
+
+let _defaultTitle = null;
+let _defaultDesc = null;
+let _defaultH1 = null;
+
+function applyTabMeta(tabId) {
+    if (_defaultTitle === null) {
+        _defaultTitle = document.title;
+        const md = document.querySelector('meta[name="description"]');
+        _defaultDesc = md ? md.getAttribute('content') : '';
+        const h1El0 = document.getElementById('heroTitle');
+        _defaultH1 = h1El0 ? h1El0.innerHTML : '';
+    }
+    const path = TAB_ROUTES[tabId] || '/';
+    const onHome = (location.pathname === '/' || location.pathname === '/index.html') && tabId === 'compress';
+    const meta = TAB_META[tabId];
+    const title = onHome ? _defaultTitle : (meta ? meta.title : _defaultTitle);
+    const desc = onHome ? _defaultDesc : (meta ? meta.desc : _defaultDesc);
+    document.title = title;
+    const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el && val) el.setAttribute('content', val); };
+    setMeta('meta[name="description"]', desc);
+    setMeta('meta[name="title"]', title);
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', desc);
+    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:description"]', desc);
+    const canonUrl = 'https://www.kompresminimax.online' + (onHome ? '/' : path);
+    const canon = document.querySelector('link[rel="canonical"]');
+    if (canon) canon.setAttribute('href', canonUrl);
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', canonUrl);
+    // H1 dinamis per halaman (teks persis blueprint SEO); beranda mempertahankan H1 bawaan
+    const h1El = document.getElementById('heroTitle');
+    if (h1El) {
+        if (onHome) h1El.innerHTML = _defaultH1;
+        else if (meta && meta.h1) h1El.textContent = meta.h1;
+    }
+}
+
+function tabFromPath() {
+    const p = location.pathname.replace(/\/+$/, '') || '/';
+    for (const [tab, route] of Object.entries(TAB_ROUTES)) {
+        if (route === p) return tab;
+    }
+    return 'compress';
+}
+
+// -------------------------------------------------------------
+// SEKSI PANDUAN PER HALAMAN (struktur H2 persis blueprint SEO)
+// Token [[tab:resize|Label]] dirender jadi tautan internal antar-tool.
+// -------------------------------------------------------------
+const PAGES_GUIDE = {
+    compress: [
+        { h2: 'Kompres PDF Sekarang', body: '<p>Tool kompres ada tepat di atas bagian ini: seret &amp; jatuhkan file PDF atau foto, target ukuran sudah terisi <strong>200 KB</strong> secara default, lalu klik tombol proses. Tanpa daftar, tanpa watermark.</p>' },
+        { h2: 'Cara Kompres PDF Jadi 200KB', body: '<ol><li>Unggah file PDF (atau foto) ke area unggah di atas.</li><li>Atur target ukuran — misalnya 200 KB untuk pas foto &amp; KTP, 300 KB untuk surat pernyataan, atau 500 KB untuk ijazah.</li><li>Klik Proses, tunggu sebentar, lalu unduh. Ukuran hasil diusahakan pas di bawah target yang kamu tentukan.</li></ol>' },
+        { h2: 'Panduan Ukuran Berkas Wajib SSCASN CPNS & PPPK', body: '<table class="guide-table"><tr><th>Dokumen</th><th>Batas Maks</th><th>Target Aman</th></tr><tr><td>Pas foto (JPG, latar merah)</td><td>200 KB</td><td>190 KB</td></tr><tr><td>KTP / KK</td><td>200 KB</td><td>180 KB</td></tr><tr><td>Surat pernyataan</td><td>300 KB</td><td>200–300 KB</td></tr><tr><td>Ijazah &amp; transkrip</td><td>500–1000 KB</td><td>450 KB</td></tr><tr><td>Sertifikat / STR</td><td>800–1000 KB</td><td>700 KB</td></tr></table><p>Target aman sengaja sedikit di bawah batas resmi supaya berkasmu tidak ditolak hanya karena perbedaan pembacaan ukuran file.</p>' },
+        { h2: 'Kenapa Lebih Aman di Sini?', body: '<p>Semua proses berjalan <strong>100% di browser perangkatmu</strong> (client-side). File tidak pernah diunggah ke server mana pun, jadi dokumen sensitif — KTP, ijazah, surat pernyataan — tidak meninggalkan HP atau laptopmu. Berbeda dengan tool online lain yang memproses file di server mereka.</p>' },
+        { h2: 'Tips Agar PDF Lolos Verifikasi SSCASN', body: '<p>Pakai target sedikit di bawah batas resmi (misalnya 190 KB untuk batas 200 KB). Setelah dikompres, teks dokumen tetap tajam dan masih bisa dicari (Ctrl+F), karena yang diperkecil adalah gambar raster di dalamnya, bukan teksnya. Selalu buka dan cek file hasil unduhan sebelum mengunggahnya ke SSCASN.</p>' },
+        { h2: 'Pertanyaan Seputar Kompres PDF CPNS (FAQ)', body: '<p><strong>Apakah kompres membuat teks buram?</strong><br>Sistem menyeimbangkan resolusi gambar dan ketajaman teks — tulisan dan angka penting tetap jelas terbaca verifikator.</p><p><strong>Berapa ukuran surat pernyataan untuk SSCASN?</strong><br>Maksimal 300 KB; kompres ke target 200–300 KB agar aman.</p><p><strong>Apakah file saya diunggah ke server?</strong><br>Tidak. Seluruh proses 100% lokal di browsermu.</p>' },
+        { h2: 'Tool Terkait', body: '<p>[[tab:resize|📐 Ubah Ukuran Pas Foto]] [[tab:merge|📑 Gabung PDF]] [[tab:split|✂️ Pisah PDF]]</p>' }
+    ],
+    bgchange: [
+        { h2: 'Ganti Background Sekarang', body: '<p>Area unggah ada tepat di atas bagian ini — seret dan jatuhkan fotomu, AI akan memisahkan orang dari latar lama secara otomatis, lalu kamu tinggal memilih warna background baru.</p>' },
+        { h2: 'Pilih Warna Background', body: '<p>Preset warna resmi yang tersedia: <strong>Merah #FF0000</strong> (standar CPNS), <strong>Merah BKN #CC0000</strong>, <strong>Biru BKN #0066CC</strong>, <strong>Biru #0000FF</strong>, Putih, atau warna kustom apa pun lewat pemilih warna.</p>' },
+        { h2: 'Cara Ganti Background Foto Jadi Merah', body: '<ol><li>Unggah foto (selfie atau pas foto lama) di area atas.</li><li>Tunggu AI menghapus background lama — unduhan model AI ±40 MB hanya terjadi sekali, kunjungan berikutnya langsung instan.</li><li>Pilih warna (mis. Merah), lalu unduh hasilnya.</li></ol>' },
+        { h2: 'Warna Merah untuk Apa Saja?', body: '<p>Background merah lazim dipakai untuk pas foto lamaran kerja &amp; CPNS, SKCK, kartu pegawai, dan ijazah. Untuk foto KTP ada aturan tahun lahir: <strong>ganjil = merah, genap = biru</strong>. Di sini kedua warna resmi itu tinggal klik.</p>' },
+        { h2: 'Lanjut: Potong 3x4 & Kompres di Bawah 200KB', body: '<p>Selesai ganti background, jangan berhenti di tengah jalan: pakai tombol <strong>“➡️ Lanjut Potong 3x4 &amp; Kompres”</strong> di sebelah tombol Unduh untuk mengirim foto langsung ke [[tab:resize|📐 Ubah Ukuran Foto]] dengan preset 3x4, lalu lanjutkan ke [[tab:compress|🗜️ Kompres File]] agar ukurannya pas di bawah 200 KB — alur lengkap pas foto CPNS tanpa unduh-unggah ulang.</p>' },
+        { h2: 'Pertanyaan Seputar Background Merah (FAQ)', body: '<p><strong>Apakah benar gratis tanpa batas?</strong><br>Ya. Tidak ada kuota, tidak ada watermark, tidak perlu daftar.</p><p><strong>Kenapa kunjungan pertama agak lama?</strong><br>Browser mengunduh model AI (±40 MB) sekali saja; setelah itu tersimpan dan proses berikutnya instan.</p><p><strong>Apakah foto saya diunggah ke server?</strong><br>Tidak. AI berjalan 100% di browsermu.</p>' }
+    ],
+    resize: [
+        { h2: 'Resize Pas Foto Sekarang', body: '<p>Area unggah ada tepat di atas bagian ini: pilih foto, klik preset 2x3 / 3x4 / 4x6, atur format &amp; kualitas, lalu unduh. Untuk hasil akhir di bawah 200 KB, lanjutkan dengan tombol rantai ke kompres.</p>' },
+        { h2: 'Tabel Ukuran Pas Foto: cm, mm & Piksel', body: '<table class="guide-table"><tr><th>Ukuran</th><th>Milimeter</th><th>Piksel @300 DPI</th></tr><tr><td>2x3 cm</td><td>20 × 30 mm</td><td>236 × 354 px</td></tr><tr><td>3x4 cm</td><td>30 × 40 mm</td><td>354 × 472 px</td></tr><tr><td>4x6 cm</td><td>40 × 60 mm</td><td>472 × 709 px</td></tr></table><p>Preset di tool ini sudah memakai angka piksel 300 DPI di atas — tinggal klik, tidak perlu menghitung rasio manual.</p>' },
+        { h2: 'Cara Resize Pas Foto di HP Tanpa Aplikasi', body: '<ol><li>Unggah foto dari galeri HP.</li><li>Klik preset ukuran (mis. Pas Foto 3x4 CPNS) — foto dipotong proporsional mengikuti rasio, tidak gepeng.</li><li>Geser pratinjau untuk mengatur posisi wajah, pilih format JPG, lalu unduh.</li><li>Perlu di bawah 200 KB? Klik “➡️ Lanjut Kompres &lt;200KB”.</li></ol>' },
+        { h2: 'Kesalahan yang Bikin Pas Foto Ditolak', body: '<p>Tiga kesalahan paling sering: <strong>foto melebar/gepeng</strong> karena rasio dipaksa tanpa crop proporsional; <strong>resolusi terlalu rendah</strong> sehingga wajah pecah saat dicetak; dan <strong>warna background salah</strong> (mis. diminta merah, dikirim biru). Preset + mode potong di tool ini mencegah ketiganya.</p>' },
+        { h2: 'Lanjut: Ganti Background Merah atau Biru', body: '<p>Background fotomu belum sesuai syarat? Ganti dulu warnanya pakai AI di [[tab:bgchange|🎨 Ganti Background]], hasilnya bisa langsung dikirim balik ke halaman ini dengan preset 3x4.</p>' },
+        { h2: 'Pertanyaan Seputar Pas Foto (FAQ)', body: '<p><strong>Pas foto 3x4 itu berapa piksel?</strong><br>354 × 472 piksel pada standar cetak 300 DPI.</p><p><strong>Apakah foto saya akan gepeng?</strong><br>Tidak — mode potong (crop) menjaga proporsi wajah tetap natural.</p><p><strong>Bagaimana cara membuat ukurannya di bawah 200 KB?</strong><br>Setelah resize, klik tombol “➡️ Lanjut Kompres &lt;200KB” — foto dikirim ke kompresor dengan target 200 KB.</p>' }
+    ],
+    merge: [
+        { h2: 'Gabung PDF Sekarang', body: '<p>Area unggah ada tepat di atas bagian ini: pilih minimal 2 file PDF, atur urutannya, lalu gabungkan jadi satu dokumen. Tanpa batas jumlah file, tanpa watermark.</p>' },
+        { h2: 'Cara Menggabungkan File PDF', body: '<ol><li>Unggah semua file PDF yang mau disatukan.</li><li>Geser urutan file sesuai susunan dokumen yang diinginkan.</li><li>Klik Gabungkan, lalu unduh satu file PDF hasilnya.</li></ol>' },
+        { h2: 'Atur Urutan Halaman Sebelum Digabung', body: '<p>Urutan file menentukan urutan halaman di dokumen akhir. Kalau perlu mengatur sampai level halaman (putar, hapus, pindah posisi), pakai [[tab:organize|🔄 Susun PDF]] setelah file digabung.</p>' },
+        { h2: 'Gabung PDF untuk Berkas CPNS & Lamaran', body: '<p>Contoh kebutuhan yang sering muncul: ijazah + transkrip + sertifikat pendukung diminta sebagai satu file PDF. Gabungkan di sini, lalu perkecil ukurannya dengan [[tab:compress|🗜️ Kompres File]] sampai di bawah batas unggah SSCASN.</p>' },
+        { h2: 'Pertanyaan Seputar Gabung PDF (FAQ)', body: '<p><strong>Berapa file maksimal yang bisa digabung?</strong><br>Tidak ada batas dari tool ini — tergantung kemampuan perangkatmu.</p><p><strong>Apakah kualitas dokumen berubah?</strong><br>Tidak, halaman digabung apa adanya tanpa kompresi ulang.</p><p><strong>Apakah file diunggah ke server?</strong><br>Tidak, proses 100% di browsermu.</p>' },
+        { h2: 'Tool Terkait', body: '<p>[[tab:split|✂️ Pisah PDF]] [[tab:organize|🔄 Susun PDF]] [[tab:compress|🗜️ Kompres File]]</p>' }
+    ],
+    split: [
+        { h2: 'Pisah PDF Sekarang', body: '<p>Area unggah ada tepat di atas bagian ini: pilih file PDF, tulis rentang halaman yang mau diambil, lalu unduh sebagai file baru.</p>' },
+        { h2: 'Cara Memisahkan Halaman PDF', body: '<ol><li>Unggah file PDF.</li><li>Tulis rentang halaman, misalnya <strong>1-3, 5</strong> untuk mengambil halaman 1, 2, 3, dan 5.</li><li>Klik proses dan unduh PDF baru berisi halaman pilihanmu saja.</li></ol>' },
+        { h2: 'Contoh Rentang Halaman yang Sering Dipakai', body: '<p>Ambil halaman ijazah saja dari bundel berkas (mis. halaman 2), pisahkan lampiran yang tidak diminta, atau keluarkan halaman kosong hasil scan. Format penulisannya fleksibel: rentang dengan tanda hubung dan halaman tunggal dipisah koma.</p>' },
+        { h2: 'Pertanyaan Seputar Pisah PDF (FAQ)', body: '<p><strong>Apakah file asli ikut berubah?</strong><br>Tidak — hasilnya adalah file PDF baru, file aslimu tetap utuh.</p><p><strong>Bisakah mengambil halaman yang tidak berurutan?</strong><br>Bisa, pisahkan dengan koma: contoh 1, 4, 7-9.</p><p><strong>Apakah file diunggah ke server?</strong><br>Tidak, 100% diproses lokal.</p>' },
+        { h2: 'Tool Terkait', body: '<p>[[tab:merge|📑 Gabung PDF]] [[tab:organize|🔄 Susun PDF]] [[tab:compress|🗜️ Kompres File]]</p>' }
+    ],
+    organize: [
+        { h2: 'Susun PDF Sekarang', body: '<p>Area unggah ada tepat di atas bagian ini: pilih file PDF, lalu susun ulang halamannya lewat pratinjau thumbnail — geser, putar, atau hapus halaman.</p>' },
+        { h2: 'Cara Mengurutkan, Memutar & Menghapus Halaman', body: '<ol><li>Unggah file PDF — semua halaman tampil sebagai thumbnail.</li><li>Seret thumbnail untuk memindah posisi, klik putar untuk halaman yang miring 90°, dan hapus lembar yang tidak perlu.</li><li>Unduh PDF dengan susunan baru.</li></ol>' },
+        { h2: 'Kapan Perlu Menyusun Ulang PDF?', body: '<p>Hasil scan yang urutannya terbalik, halaman lampiran yang tertukar, atau dokumen gabungan dari beberapa sumber yang susunannya acak — semua bisa dibereskan di sini sebelum file diunggah atau dicetak.</p>' },
+        { h2: 'Pertanyaan Seputar Susun PDF (FAQ)', body: '<p><strong>Apakah urutan asli bisa dikembalikan?</strong><br>Selama belum diunduh, susun ulang saja lagi; file asli di perangkatmu tidak berubah.</p><p><strong>Apakah kualitas halaman menurun?</strong><br>Tidak, halaman hanya disusun ulang tanpa render ulang.</p><p><strong>Apakah file diunggah ke server?</strong><br>Tidak.</p>' },
+        { h2: 'Tool Terkait', body: '<p>[[tab:merge|📑 Gabung PDF]] [[tab:split|✂️ Pisah PDF]] [[tab:scan|📷 Scan Dokumen]]</p>' }
+    ],
+    scan: [
+        { h2: 'Scan Sekarang', body: '<p>Tombol kamera dan unggah foto ada tepat di atas bagian ini: jepret dokumen langsung dari kamera HP atau pilih foto dari galeri, lalu susun jadi satu PDF.</p>' },
+        { h2: 'Cara Scan Dokumen dengan Kamera HP', body: '<ol><li>Klik Mulai Scan / buka kamera, jepret tiap lembar dokumen.</li><li>Atur urutan lembar sesuai dokumen asli.</li><li>Unduh hasilnya sebagai file PDF.</li></ol>' },
+        { h2: 'Tips Hasil Scan Tajam & Mudah Dibaca', body: '<p>Jepret di tempat dengan cahaya rata (hindari bayangan tangan), posisikan kamera tegak lurus di atas dokumen, dan pakai latar yang kontras dengan warna kertas. Hasil scan yang tajam juga lebih mudah dikompres tanpa mengorbankan keterbacaan teks.</p>' },
+        { h2: 'Lanjut: Kompres Hasil Scan di Bawah 200KB', body: '<p>PDF hasil scan biasanya besar. Untuk syarat unggah SSCASN, lanjutkan ke [[tab:compress|🗜️ Kompres File]] dan kompres ke target 200 KB — teks tetap tajam karena kompresor menyeimbangkan raster gambarnya.</p>' },
+        { h2: 'Pertanyaan Seputar Scan Dokumen (FAQ)', body: '<p><strong>Perlu install aplikasi scanner?</strong><br>Tidak, semua berjalan di browser HP atau laptopmu.</p><p><strong>Apakah hasil scan dikirim ke server?</strong><br>Tidak, file dibuat dan disimpan lokal di perangkatmu.</p><p><strong>Format hasil akhirnya apa?</strong><br>PDF, siap digabung atau dikompres lagi bila perlu.</p>' }
+    ],
+    pdfconvert: [
+        { h2: 'Konversi Sekarang', body: '<p>Area unggah ada tepat di atas bagian ini: pilih file PDF, tentukan format keluaran, lalu klik Mulai Konversi. Semua diproses lokal — tanpa daftar, tanpa watermark.</p>' },
+        { h2: 'Format Konversi yang Tersedia', body: '<p>PDF ke <strong>Word (.docx)</strong>, <strong>PowerPoint (.pptx)</strong>, <strong>Excel (.xlsx)</strong>, <strong>Teks (.txt)</strong>, <strong>Web (.html)</strong>, atau <strong>ZIP berisi gambar</strong> tiap halaman. Format Office yang dihasilkan adalah format modern asli (OOXML), bukan file lama yang diganti nama.</p>' },
+        { h2: 'Cara Mengubah PDF ke Word (DOCX)', body: '<ol><li>Unggah file PDF.</li><li>Pilih format Microsoft Word — keluarannya <strong>.docx</strong> asli yang bisa langsung diedit di Word, Google Docs, atau LibreOffice.</li><li>Klik Mulai Konversi, lalu unduh hasilnya.</li></ol>' },
+        { h2: 'Pertanyaan Seputar Konversi PDF (FAQ)', body: '<p><strong>Apakah hasil Word-nya .docx asli?</strong><br>Ya — paket OOXML modern, bukan .doc lama.</p><p><strong>Apakah tabel PDF ikut terbawa ke Excel?</strong><br>Teks diekstrak per halaman dan disusun per baris; untuk PDF hasil scan (gambar), gunakan format gambar/ZIP karena tidak ada teks yang bisa diekstrak.</p><p><strong>Apakah file diunggah ke server?</strong><br>Tidak, konversi 100% lokal di browser.</p>' },
+        { h2: 'Tool Terkait', body: '<p>[[tab:compress|🗜️ Kompres File]] [[tab:merge|📑 Gabung PDF]]</p>' }
+    ]
+};
+
+function renderPageGuide(tabId) {
+    const wrap = document.getElementById('pageGuide');
+    if (!wrap) return;
+    const secs = PAGES_GUIDE[tabId] || [];
+    wrap.innerHTML = secs.map(s => {
+        const body = s.body.replace(/\[\[tab:(\w+)\|([^\]]+)\]\]/g, (m, t, label) =>
+            `<a class="guide-link" href="${TAB_ROUTES[t] || '/'}" onclick="event.preventDefault(); switchToolTab('${t}'); window.scrollTo({top:0, behavior:'smooth'});">${label}</a>`);
+        return `<article class="guide-block"><h2>${s.h2}</h2>${body}</article>`;
+    }).join('');
+}
+
+
+function switchToolTab(tabId, skipRoute) {
     document.querySelectorAll('.tab-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.tab === tabId);
     });
@@ -420,7 +633,23 @@ function switchToolTab(tabId) {
     if (tabId !== 'scan' && cameraStream) {
         stopCameraScanner();
     }
+
+    // SEO routing: URL bersih per tab + title/meta dinamis
+    if (!skipRoute) {
+        const route = TAB_ROUTES[tabId];
+        if (route && location.pathname !== route) {
+            history.pushState({ tab: tabId }, '', route);
+        }
+    }
+    applyTabMeta(tabId);
+    renderPageGuide(tabId);
+    window._currentTab = tabId;
 }
+
+// Back/Forward browser mengikuti tab
+window.addEventListener('popstate', () => {
+    switchToolTab(tabFromPath(), true);
+});
 
 // Format byte display helper
 function formatBytes(bytes, decimals = 2) {
@@ -767,6 +996,12 @@ function handleResizeFileInput(file) {
             document.getElementById('resizeWorkspace').classList.remove('hidden');
 
             renderResizeCanvas();
+
+            // Workflow chaining: preset tertunda (mis. dari tab Ganti Background)
+            if (window._pendingResizePreset) {
+                applyResizePreset(window._pendingResizePreset);
+                window._pendingResizePreset = null;
+            }
         };
         img.src = e.target.result;
     };
@@ -928,6 +1163,30 @@ function downloadResizedPhoto() {
         a.href = URL.createObjectURL(blob);
         a.download = `${baseName}_${w}x${h}${ext}`;
         a.click();
+    }, mime, quality);
+}
+
+// WORKFLOW CHAINING: hasil resize -> tab Kompres File (target 200 KB)
+function sendResizeToCompress() {
+    const canvas = document.getElementById('resizeCanvasPreview');
+    if (!canvas || !resizeOriginalImg) { alert('Belum ada foto yang diproses.'); return; }
+    const mime = document.getElementById('resizeFormatSelect').value;
+    const quality = parseInt(document.getElementById('resizeQualityRange').value, 10) / 100;
+    let ext = 'jpg';
+    if (mime === 'image/png') ext = 'png';
+    else if (mime === 'image/webp') ext = 'webp';
+    const baseName = (resizeOriginalFile?.name || 'foto').replace(/\.[^/.]+$/, '');
+
+    canvas.toBlob(blob => {
+        if (!blob) return;
+        const file = new File([blob], `${baseName}_${canvas.width}x${canvas.height}.${ext}`, { type: mime });
+        switchToolTab('compress');
+        setCompressionMode('target');
+        applyPreset(200, 'KB');
+        handleCompressFiles([file]);
+        document.querySelector('.app-container')?.scrollIntoView({ behavior: 'smooth' });
+        // Langsung proses agar hasil kompres <200KB segera tampil
+        setTimeout(() => { processAllCompress(); }, 150);
     }, mime, quality);
 }
 
@@ -1360,7 +1619,10 @@ async function generatePdfFromScan() {
 // EVENT LISTENERS & INITIALIZATION
 // -------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-    initLiveClock();
+    initInstallPrompt();
+
+    // Aktifkan tab sesuai URL bersih (SEO routing), mis. /resize-pas-foto
+    switchToolTab(tabFromPath(), true);
 
     // Stored language
     try {
@@ -1557,7 +1819,7 @@ if (typeof pdfjsLib !== 'undefined') {
 
 const convertFormatDescriptions = {
     'powerpoint': 'Format Slide Presentasi Microsoft PowerPoint (.pptx)',
-    'word': 'Format Dokumen Microsoft Word (.doc)',
+    'word': 'Format Dokumen Microsoft Word (.docx)',
     'excel': 'Format Lembar Kerja Spreadsheet Microsoft Excel (.xlsx)',
     'text': 'Format Plain Text Dokumen (.txt)',
     'images': 'Format Arsip Gambar Lembaran (.zip JPG Resolusi Tinggi)',
@@ -1836,16 +2098,18 @@ async function executePdfConversion() {
             outputBlob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
             outputExt = 'txt';
         } 
-        // 3. FORMAT WORD (.DOC)
+        // 3. FORMAT WORD (.DOCX) — paket OOXML asli via JSZip
         else if (selectedConvertFormat === 'word') {
-            let docHtml = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
-            docHtml += '<head><meta charset="utf-8"><title>' + baseName + '</title>';
-            docHtml += '<style>body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.5; padding: 20px; } p { margin-bottom: 1em; } .page-break { page-break-after: always; }</style></head><body>';
-            
+            if (typeof JSZip === 'undefined') {
+                throw new Error('Pustaka JSZip belum dimuat.');
+            }
+            const escXml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            let bodyXml = '';
+
             for (let i = 1; i <= totalPages; i++) {
                 const page = await currentPdfDocument.getPage(i);
                 const content = await page.getTextContent();
-                
+
                 let lines = [];
                 let currentLine = [];
                 let lastY = null;
@@ -1861,19 +2125,32 @@ async function executePdfConversion() {
                 });
                 if (currentLine.length > 0) lines.push(currentLine.join(' '));
 
-                docHtml += `<div class="pdf-page"><h2>Halaman ${i}</h2>`;
+                if (i > 1) bodyXml += '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+                bodyXml += `<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t xml:space="preserve">Halaman ${i}</w:t></w:r></w:p>`;
                 lines.forEach(line => {
-                    if (line.trim()) docHtml += `<p>${line.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`;
+                    if (line.trim()) bodyXml += `<w:p><w:r><w:t xml:space="preserve">${escXml(line)}</w:t></w:r></w:p>`;
                 });
-                docHtml += '</div>';
-                if (i < totalPages) docHtml += '<br clear="all" style="page-break-before:always" />';
-                
+
                 if (progressFill) progressFill.style.width = `${Math.round((i / totalPages) * 100)}%`;
                 if (statusText) statusText.textContent = `Menata struktur Word halaman ${i} dari ${totalPages}...`;
             }
-            docHtml += '</body></html>';
-            outputBlob = new Blob([docHtml], { type: 'application/msword;charset=utf-8' });
-            outputExt = 'doc';
+
+            const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${bodyXml}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1418" w:right="1418" w:bottom="1418" w:left="1418"/></w:sectPr></w:body></w:document>`;
+            const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`;
+            const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+            const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:rPr><w:b/><w:sz w:val="32"/></w:rPr></w:style></w:styles>`;
+
+            const docxZip = new JSZip();
+            docxZip.file('[Content_Types].xml', contentTypesXml);
+            docxZip.folder('_rels').file('.rels', relsXml);
+            docxZip.folder('word').file('document.xml', documentXml);
+            docxZip.folder('word').file('styles.xml', stylesXml);
+            outputBlob = await docxZip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+            outputExt = 'docx';
         }
         // 4. FORMAT EXCEL (.XLSX)
         else if (selectedConvertFormat === 'excel') {
